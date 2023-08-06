@@ -1,1 +1,1 @@
-# hug-crypto
+# go-walker
