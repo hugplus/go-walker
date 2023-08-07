@@ -1,6 +1,8 @@
-package api
+package start
 
-import "github.com/hugplus/go-walker/modules/sys/router"
+import (
+	"github.com/hugplus/go-walker/modules/demo/router"
+)
 
 func init() {
 	//注册路由 fixme 其他应用的路由，在本目录新建文件放在init方法

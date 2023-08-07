@@ -12,6 +12,7 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/hugplus/go-walker/common/middleware"
 	"github.com/hugplus/go-walker/common/utils"
 	"github.com/hugplus/go-walker/config"
 
@@ -25,10 +26,9 @@ var (
 	Cfg    config.AppCfg
 	Log    *zap.Logger
 	Redis  *redis.Client
-	dbs    map[string]*gorm.DB
 	lock   sync.RWMutex
 	engine http.Handler
-	//AppRouters []func() // app路由
+	dbs    = make(map[string]*gorm.DB, 0)
 )
 
 func GetEngine() http.Handler {
@@ -36,7 +36,25 @@ func GetEngine() http.Handler {
 }
 
 func SetEngine(aEngine http.Handler) {
+	fmt.Println("init engine")
 	engine = aEngine
+}
+
+func GetGinEngine() *gin.Engine {
+	var r *gin.Engine
+	lock.RLock()
+	defer lock.RUnlock()
+	if engine == nil {
+		engine = gin.New()
+	}
+	switch engine.(type) {
+	case *gin.Engine:
+		r = engine.(*gin.Engine)
+	default:
+		log.Fatal("not support other engine")
+		os.Exit(-1)
+	}
+	return r
 }
 
 func Init() {
@@ -45,18 +63,36 @@ func Init() {
 	dbInit()
 }
 
-func Run() {
+func Run(appRs *[]func()) {
 	if Cfg.Server.Mode == ModeProd.String() {
-		gin.SetMode(Cfg.Server.Mode)
-	}
-	srv := &http.Server{
-		Addr:    fmt.Sprintf("%s:%d", Cfg.Server.Host, Cfg.Server.Port),
-		Handler: GetEngine(),
-	}
-	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		log.Fatal("listen: ", err)
+		gin.SetMode(gin.ReleaseMode)
 	}
 
+	initRouter()
+
+	//初始化路由
+	for _, f := range *appRs {
+		f()
+	}
+
+	//服务启动参数
+	srv := &http.Server{
+		Addr:           fmt.Sprintf("%s:%d", Cfg.Server.Host, Cfg.Server.Port),
+		Handler:        GetEngine(),
+		ReadTimeout:    time.Duration(Cfg.Server.GetReadTimeout()),
+		WriteTimeout:   time.Duration(Cfg.Server.GetWriteTimeout()),
+		MaxHeaderBytes: 1 << 20,
+	}
+
+	//启动服务
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatal("listen: ", err)
+		}
+	}()
+	fmt.Printf("Server started Listen %s:%d \n", Cfg.Server.Host, Cfg.Server.Port)
+
+	// 等待中断信号以优雅地关闭服务器（设置 5 秒的超时时间）
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
@@ -78,7 +114,6 @@ func logInit() {
 }
 
 // Zap 获取 zap.Logger
-// Author [SliverHorn](https://github.com/SliverHorn)
 func zapInit() (logger *zap.Logger) {
 	if ok, _ := utils.PathExists(Cfg.Logger.Director); !ok { // 判断是否有Director文件夹
 		fmt.Printf("create %v directory\n", Cfg.Logger.Director)
@@ -108,4 +143,10 @@ func redisInit() {
 		Log.Info("redis connect ping response:", zap.String("pong", pong))
 		Redis = rdb
 	}
+}
+
+func initRouter() {
+	//初始化gin
+	r := GetGinEngine()
+	middleware.InitMiddleware(r)
 }

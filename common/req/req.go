@@ -1,5 +1,9 @@
 package req
 
+type BaseReq struct {
+	ReqId string `json:"reqId" form:"reqId"` // 请求id 链路跟踪
+}
+
 type IdReq struct {
 	Id int `json:"id" form:"id"` // 主键ID
 }

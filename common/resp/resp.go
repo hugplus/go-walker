@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/hugplus/go-walker/common/consts"
 )
 
 const (
@@ -29,7 +30,7 @@ type RespFunc func()
 
 func Ok(c *gin.Context, data any) {
 	c.JSON(http.StatusOK, resp{
-		ReqId: c.GetString("reqId"),
+		ReqId: c.GetString(consts.REQ_ID),
 		Code:  OK,
 		Msg:   "ok",
 		Data:  data,

@@ -8,7 +8,7 @@ import (
 	"github.com/hugplus/go-walker/common/resp"
 )
 
-type SysApi struct {
+type DemoApi struct {
 	api.BaseApi
 }
 
@@ -17,8 +17,8 @@ type SysApi struct {
 // @Description Ping接口
 // @Tags Default
 // @Success 200 {object} response.Response{data=string}} "{"code": 200, "data": [...]}"
-// @Router /api/v1/ping [get]
-func (e *SysApi) Ping(c *gin.Context) {
-	//e.GetReqId(c)
+// @Router /api/v1/demo/ping [get]
+func (e *DemoApi) Ping(c *gin.Context) {
+	e.GetReqId(c)
 	resp.Ok(c, time.Now())
 }

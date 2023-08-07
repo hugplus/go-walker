@@ -17,20 +17,20 @@ func dbInit() {
 	var db *gorm.DB
 	var err error
 
-	for _, dbc := range Cfg.Dbs {
+	for key, dbc := range Cfg.DBs {
 		switch dbc.Driver {
 		case "mysql":
-			db, err = gorm.Open(mysql.Open(dbc.Dsn), &gorm.Config{})
+			db, err = gorm.Open(mysql.Open(dbc.DSN), &gorm.Config{})
 		case "pgsql":
-			db, err = gorm.Open(postgres.Open(dbc.Dsn), &gorm.Config{})
+			db, err = gorm.Open(postgres.Open(dbc.DSN), &gorm.Config{})
 		case "sqlite":
-			db, err = gorm.Open(sqlite.Open(dbc.Dsn), &gorm.Config{})
+			db, err = gorm.Open(sqlite.Open(dbc.DSN), &gorm.Config{})
 		case "mssql":
-			db, err = gorm.Open(sqlserver.Open(dbc.Dsn), &gorm.Config{})
+			db, err = gorm.Open(sqlserver.Open(dbc.DSN), &gorm.Config{})
 		// case "oracle":
-		// 	db, err = gorm.Open(oracle.Open(dbc.Dsn), &gorm.Config{})
+		// 	db, err = gorm.Open(oracle.Open(dbc.DSN), &gorm.Config{})
 		// case "clickhouse":
-		// 	db, err = gorm.Open(clickhouse.Open(dbc.Dsn), &gorm.Config{})
+		// 	db, err = gorm.Open(clickhouse.Open(dbc.DSN), &gorm.Config{})
 		default:
 			err = errors.New("db err")
 		}
@@ -45,7 +45,7 @@ func dbInit() {
 		sqlDB.SetMaxIdleConns(dbc.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(dbc.MaxOpenConns)
 		sqlDB.SetConnMaxLifetime(time.Minute * time.Duration(dbc.MaxLifetime))
-		SetDb(dbc.DBName, db)
+		SetDb(key, db)
 	}
 
 }

@@ -11,11 +11,12 @@ import (
 )
 
 var (
+	//AppRouters = make([]func(), 0)
 	configYml string
 	StartCmd  = &cobra.Command{
 		Use:     "start",
 		Short:   "Get Application config info",
-		Example: "go-walker config -c resources/config.dev.yml",
+		Example: "go-walker start -c resources/config.dev.yml",
 		Run: func(cmd *cobra.Command, args []string) {
 			run()
 		},
@@ -48,9 +49,5 @@ func run() {
 		fmt.Println(err)
 	}
 	core.Init()
-
-	core.Run()
-
-	//api.AppRouters
-
+	core.Run(&AppRouters)
 }

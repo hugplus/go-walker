@@ -1,9 +1,6 @@
 package router
 
 import (
-	"log"
-	"os"
-
 	"github.com/gin-gonic/gin"
 
 	"github.com/hugplus/go-walker/core"
@@ -16,19 +13,7 @@ var (
 
 // InitRouter 路由初始化
 func InitRouter() {
-	var r *gin.Engine
-	h := core.GetEngine()
-	if h == nil {
-		h = gin.New()
-		core.SetEngine(h)
-	}
-	switch h.(type) {
-	case *gin.Engine:
-		r = h.(*gin.Engine)
-	default:
-		log.Fatal("not support other engine")
-		os.Exit(-1)
-	}
+	r := core.GetGinEngine()
 
 	// the jwt middleware
 	// authMiddleware, err := common.AuthInit()
@@ -54,7 +39,7 @@ func InitRouter() {
 // noCheckRoleRouter 无需认证的路由
 func noCheckRoleRouter(r *gin.Engine) {
 	// 可根据业务需求来设置接口版本
-	v := r.Group("/v2/sso")
+	v := r.Group("/api/v1")
 
 	for _, f := range routerNoCheckRole {
 		f(v)

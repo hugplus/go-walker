@@ -26,18 +26,9 @@ func init() {
 
 // 无需认证的路由示例
 func sysNoCheckRoleRouter(v1 *gin.RouterGroup) {
-	//api := apis.SSO{}
+	api := apis.SysApi{}
 	r := v1.Group("")
 	{
-		r.GET("/ping", apis.Ping)
-		// r.POST("/loginWechat", api.LoginByWechat)
-		// r.POST("/getDingCfg", api.GetDingCfg)
-		// r.POST("/loginDing", api.LoginByDing)
-		// r.POST("/register", api.Register)
-		// r.POST("/captcha", api.GenerateCaptchaHandler)
-		// r.POST("/sendCode", api.SendCode)
-		// r.POST("/getUserinfo", api.GetUserInfo)
-		// r.POST("/forgetPwd", api.ForgetPwd)
-
+		r.GET("/ping", api.Ping)
 	}
 }

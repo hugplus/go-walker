@@ -2,6 +2,7 @@ package core
 
 import (
 	"io"
+	"strings"
 	"time"
 
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
@@ -39,10 +40,14 @@ func (z *_zap) GetEncoderConfig() zapcore.EncoderConfig {
 }
 
 // GetEncoderCore 获取Encoder的 zapcore.Core
-// Author [SliverHorn](https://github.com/SliverHorn)
 func (z *_zap) GetEncoderCore(l zapcore.Level, level zap.LevelEnablerFunc) zapcore.Core {
 
-	path := Cfg.Logger.Director + "access_log.log"
+	path := Cfg.Logger.Director
+	if strings.HasSuffix(Cfg.Logger.Director, "/") {
+		path += "access"
+	} else {
+		path += "/access"
+	}
 
 	w := getWriter(path)
 
@@ -53,7 +58,7 @@ func (z *_zap) GetEncoderCore(l zapcore.Level, level zap.LevelEnablerFunc) zapco
 func getWriter(filename string) io.Writer {
 	//保存日志30天，每1分钟分割一次日志
 	hook, err := rotatelogs.New(
-		filename+"_%Y%m%d%H%M",
+		filename+"_%Y%m%d%H%M.log",
 		rotatelogs.WithLinkName(filename),
 		rotatelogs.WithMaxAge(time.Hour*time.Duration(Cfg.Logger.GetMaxAge())),
 		rotatelogs.WithRotationTime(time.Hour*24),
@@ -65,13 +70,11 @@ func getWriter(filename string) io.Writer {
 }
 
 // CustomTimeEncoder 自定义日志输出时间格式
-// Author [SliverHorn](https://github.com/SliverHorn)
 func (z *_zap) CustomTimeEncoder(t time.Time, encoder zapcore.PrimitiveArrayEncoder) {
 	encoder.AppendString(Cfg.Logger.Prefix + t.Format("2006/01/02 - 15:04:05.000"))
 }
 
 // GetZapCores 根据配置文件的Level获取 []zapcore.Core
-// Author [SliverHorn](https://github.com/SliverHorn)
 func (z *_zap) GetZapCores() []zapcore.Core {
 	cores := make([]zapcore.Core, 0, 7)
 	for level := Cfg.Logger.TransportLevel(); level <= zapcore.FatalLevel; level++ {
