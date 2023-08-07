@@ -12,3 +12,24 @@ type DBCfg struct {
 	LogMode      string `mapstructure:"log-mode" json:"log-mode" yaml:"log-mode"`                   // 是否开启Gorm全局日志
 	LogZap       bool   `mapstructure:"log-zap" json:"log-zap" yaml:"log-zap"`                      // 是否通过zap写入日志文件
 }
+
+func (c *DBCfg) GetMaxIdleConns() int {
+	if c.MaxIdleConns < 1 {
+		return 10
+	}
+	return c.MaxIdleConns
+}
+
+func (c *DBCfg) GetMaxOpenConns() int {
+	if c.MaxOpenConns < 1 {
+		return 30
+	}
+	return c.MaxOpenConns
+}
+
+func (c *DBCfg) GetMaxLifetime() int {
+	if c.MaxLifetime < 1 {
+		return 120
+	}
+	return c.MaxLifetime
+}

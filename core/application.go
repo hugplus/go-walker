@@ -75,9 +75,11 @@ func Run(appRs *[]func()) {
 		f()
 	}
 
+	addr := fmt.Sprintf("%s:%d", Cfg.Server.GetHost(), Cfg.Server.GetPort())
+
 	//服务启动参数
 	srv := &http.Server{
-		Addr:           fmt.Sprintf("%s:%d", Cfg.Server.Host, Cfg.Server.Port),
+		Addr:           addr,
 		Handler:        GetEngine(),
 		ReadTimeout:    time.Duration(Cfg.Server.GetReadTimeout()),
 		WriteTimeout:   time.Duration(Cfg.Server.GetWriteTimeout()),
@@ -90,7 +92,7 @@ func Run(appRs *[]func()) {
 			log.Fatal("listen: ", err)
 		}
 	}()
-	fmt.Printf("Server started Listen %s:%d \n", Cfg.Server.Host, Cfg.Server.Port)
+	fmt.Println(addr)
 
 	// 等待中断信号以优雅地关闭服务器（设置 5 秒的超时时间）
 	quit := make(chan os.Signal, 1)

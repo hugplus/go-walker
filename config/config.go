@@ -19,6 +19,20 @@ type ServerCfg struct {
 	WriteTimeout int    `mapstructure:"write-timeout" json:"write-timeout" yaml:"write-timeout"`
 }
 
+func (e *ServerCfg) GetHost() string {
+	if e.Host == "" {
+		return "0.0.0.0"
+	}
+	return e.Host
+}
+
+func (e *ServerCfg) GetPort() int {
+	if e.Port < 1 {
+		return 7788
+	}
+	return e.Port
+}
+
 func (e *ServerCfg) GetReadTimeout() int {
 	if e.ReadTimeout < 1 {
 		return 10

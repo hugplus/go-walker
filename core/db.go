@@ -18,34 +18,36 @@ func dbInit() {
 	var err error
 
 	for key, dbc := range Cfg.DBs {
-		switch dbc.Driver {
-		case "mysql":
-			db, err = gorm.Open(mysql.Open(dbc.DSN), &gorm.Config{})
-		case "pgsql":
-			db, err = gorm.Open(postgres.Open(dbc.DSN), &gorm.Config{})
-		case "sqlite":
-			db, err = gorm.Open(sqlite.Open(dbc.DSN), &gorm.Config{})
-		case "mssql":
-			db, err = gorm.Open(sqlserver.Open(dbc.DSN), &gorm.Config{})
-		// case "oracle":
-		// 	db, err = gorm.Open(oracle.Open(dbc.DSN), &gorm.Config{})
-		// case "clickhouse":
-		// 	db, err = gorm.Open(clickhouse.Open(dbc.DSN), &gorm.Config{})
-		default:
-			err = errors.New("db err")
+		if !dbc.Disable {
+			switch dbc.Driver {
+			case "mysql":
+				db, err = gorm.Open(mysql.Open(dbc.DSN), &gorm.Config{})
+			case "pgsql":
+				db, err = gorm.Open(postgres.Open(dbc.DSN), &gorm.Config{})
+			case "sqlite":
+				db, err = gorm.Open(sqlite.Open(dbc.DSN), &gorm.Config{})
+			case "mssql":
+				db, err = gorm.Open(sqlserver.Open(dbc.DSN), &gorm.Config{})
+			// case "oracle":
+			// 	db, err = gorm.Open(oracle.Open(dbc.DSN), &gorm.Config{})
+			// case "clickhouse":
+			// 	db, err = gorm.Open(clickhouse.Open(dbc.DSN), &gorm.Config{})
+			default:
+				err = errors.New("db err")
+			}
+			if err != nil {
+				panic(err)
+			}
+			var sqlDB *sql.DB
+			sqlDB, err = db.DB()
+			if err != nil {
+				panic(err)
+			}
+			sqlDB.SetMaxIdleConns(dbc.GetMaxIdleConns())
+			sqlDB.SetMaxOpenConns(dbc.GetMaxOpenConns())
+			sqlDB.SetConnMaxLifetime(time.Minute * time.Duration(dbc.GetMaxLifetime()))
+			SetDb(key, db)
 		}
-		if err != nil {
-			panic(err)
-		}
-		var sqlDB *sql.DB
-		sqlDB, err = db.DB()
-		if err != nil {
-			panic(err)
-		}
-		sqlDB.SetMaxIdleConns(dbc.MaxIdleConns)
-		sqlDB.SetMaxOpenConns(dbc.MaxOpenConns)
-		sqlDB.SetConnMaxLifetime(time.Minute * time.Duration(dbc.MaxLifetime))
-		SetDb(key, db)
 	}
 
 }

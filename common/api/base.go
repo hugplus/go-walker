@@ -18,7 +18,10 @@ func (e *BaseApi) GetReqId(c *gin.Context) string {
 	return reqId
 }
 
-func (e *BaseApi) Bind(c *gin.Context, o *any) {
-	c.ShouldBind(o)
-	
+func (e *BaseApi) GetUserId(c *gin.Context) int {
+	return c.GetInt(consts.USER_ID)
+}
+
+func (e *BaseApi) GetTenantId(c *gin.Context) int {
+	return c.GetInt(consts.TENANT_ID)
 }

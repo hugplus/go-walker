@@ -23,10 +23,10 @@ cache:              # 缓存配置
   db: 5                       # Redis数据库索引
 dbs: # 数据库配置
   - master:
-      disable: true
+#      disable: true
       driver: mysql                                                       # 数据库类型（mysql, sqlite3, postgres, sqlserver）
       dns: root:root@tcp(192.168.0.191:3306)/go-admin?charset=utf8&parseTime=True&loc=Local&timeout=1000ms  # 数据库连接字符串
-      prefix:
+#      prefix: 日志前缀
       singular: false #全局复数
       max-idle-conns: 10 #最大空闲连接数 默认10
       max-open-conns: 30 #最大打开数
