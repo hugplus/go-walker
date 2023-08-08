@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	OK    = 200
-	ERROR = 500
+	OK_CODE    = 200
+	ERROR_CODE = 500
+	OK_MSG     = "ok"
 )
 
 type resp struct {
@@ -29,18 +30,18 @@ type PageResp struct {
 type RespFunc func()
 
 func Ok(c *gin.Context, data any) {
-	c.JSON(http.StatusOK, resp{
+	c.AbortWithStatusJSON(http.StatusOK, resp{
 		ReqId: c.GetString(consts.REQ_ID),
-		Code:  OK,
-		Msg:   "ok",
+		Code:  OK_CODE,
+		Msg:   OK_MSG,
 		Data:  data,
 	})
 }
 
 func Fail(c *gin.Context, code int, msg string, data ...any) {
-	c.JSON(http.StatusOK, resp{
-		ReqId: c.GetString("reqId"),
-		Code:  ERROR,
+	c.AbortWithStatusJSON(http.StatusOK, resp{
+		ReqId: c.GetString(consts.REQ_ID),
+		Code:  code,
 		Msg:   msg,
 		Data:  data,
 	})
@@ -53,10 +54,5 @@ func Page(c *gin.Context, list []any, count int, page int, pageSize int) {
 		Size:  pageSize,
 		List:  list,
 	}
-	c.JSON(http.StatusOK, resp{
-		ReqId: c.GetString("reqId"),
-		Code:  OK,
-		Msg:   "ok",
-		Data:  p,
-	})
+	Ok(c, p)
 }

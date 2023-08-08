@@ -15,8 +15,8 @@ import (
 	"github.com/hugplus/go-walker/common/middleware"
 	"github.com/hugplus/go-walker/common/utils"
 	"github.com/hugplus/go-walker/config"
+	"github.com/hugplus/go-walker/core/cache"
 
-	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gorm.io/gorm"
@@ -25,7 +25,7 @@ import (
 var (
 	Cfg    config.AppCfg
 	Log    *zap.Logger
-	Redis  *redis.Client
+	Cache  cache.ICache
 	lock   sync.RWMutex
 	engine http.Handler
 	dbs    = make(map[string]*gorm.DB, 0)
@@ -59,7 +59,7 @@ func GetGinEngine() *gin.Engine {
 
 func Init() {
 	logInit()
-	redisInit()
+	Cache = cache.New(Cfg.Cache)
 	dbInit()
 }
 
@@ -92,7 +92,7 @@ func Run(appRs *[]func()) {
 			log.Fatal("listen: ", err)
 		}
 	}()
-	fmt.Println(addr)
+	fmt.Println("Server started ,Listen: " + addr)
 
 	// 等待中断信号以优雅地关闭服务器（设置 5 秒的超时时间）
 	quit := make(chan os.Signal, 1)
@@ -129,22 +129,6 @@ func zapInit() (logger *zap.Logger) {
 		logger = logger.WithOptions(zap.AddCaller())
 	}
 	return logger
-}
-
-func redisInit() {
-	redisCfg := Cfg.Cache
-	rdb := redis.NewClient(&redis.Options{
-		Addr:     redisCfg.Addr,
-		Password: redisCfg.Password, // no password set
-		DB:       redisCfg.DB,       // use default DB
-	})
-	pong, err := rdb.Ping(context.Background()).Result()
-	if err != nil {
-		Log.Error("redis connect ping failed, err:", zap.Error(err))
-	} else {
-		Log.Info("redis connect ping response:", zap.String("pong", pong))
-		Redis = rdb
-	}
 }
 
 func initRouter() {

@@ -19,6 +19,5 @@ type DemoApi struct {
 // @Success 200 {object} response.Response{data=string}} "{"code": 200, "data": [...]}"
 // @Router /api/v1/demo/ping [get]
 func (e *DemoApi) Ping(c *gin.Context) {
-	e.GetReqId(c)
 	resp.Ok(c, time.Now())
 }

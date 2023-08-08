@@ -1,7 +1,15 @@
 package config
 
-type RedisCfg struct {
-	Addr     string `mapstructure:"addr"`
-	Password string `mapstructure:"password"`
-	DB       int    `mapstructure:"db"`
+type CacheCfg struct {
+	Type     string `mapstructure:"type" json:"type" yaml:"type"`
+	Addr     string `mapstructure:"addr" json:"addr" yaml:"addr"`
+	Password string `mapstructure:"password" json:"password" yaml:"password"`
+	DB       int    `mapstructure:"db" json:"db" yaml:"db"`
+}
+
+func (c *CacheCfg) GetType() string {
+	if c.Type == "" {
+		return "redis"
+	}
+	return c.Type
 }
