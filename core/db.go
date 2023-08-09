@@ -19,9 +19,24 @@ func dbInit() {
 
 	for key, dbc := range Cfg.DBs {
 		if !dbc.Disable {
+
+			curLog := NewGormZapLog(Log, dbc.GetLogMode(), 200)
+			// logger.New(
+			// 	NewGormLogger(), // io writer
+			// 	logger.Config{
+			// 		SlowThreshold:             time.Second,      // Slow SQL threshold
+			// 		LogLevel:                  dbc.GetLogMode(), // Log level
+			// 		IgnoreRecordNotFoundError: true,             // Ignore ErrRecordNotFound error for logger
+			// 		ParameterizedQueries:      true,             // Don't include params in the SQL log
+			// 		Colorful:                  false,            // Disable color
+			// 	},
+			// )
+
 			switch dbc.Driver {
 			case "mysql":
-				db, err = gorm.Open(mysql.Open(dbc.DSN), &gorm.Config{})
+				db, err = gorm.Open(mysql.Open(dbc.DSN), &gorm.Config{
+					Logger: curLog,
+				})
 			case "pgsql":
 				db, err = gorm.Open(postgres.Open(dbc.DSN), &gorm.Config{})
 			case "sqlite":
@@ -70,7 +85,13 @@ func Db(name string) *gorm.DB {
 	defer lock.RUnlock()
 	if db, ok := dbs[name]; !ok || db == nil {
 		panic("db not init")
+		// Log.Error("DB not found", zap.Error(errors.New(name+" DB not found")))
+		// return nil
 	} else {
 		return db
 	}
+}
+
+func DB() *gorm.DB {
+	return Db("master")
 }

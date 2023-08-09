@@ -35,14 +35,14 @@ func (e *ServerCfg) GetPort() int {
 
 func (e *ServerCfg) GetReadTimeout() int {
 	if e.ReadTimeout < 1 {
-		return 10
+		return 20
 	}
 	return e.ReadTimeout
 }
 
 func (e *ServerCfg) GetWriteTimeout() int {
 	if e.WriteTimeout < 1 {
-		return 10
+		return 20
 	}
 	return e.WriteTimeout
 }

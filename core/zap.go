@@ -1,8 +1,9 @@
 package core
 
 import (
-	"io"
-	"strings"
+	"fmt"
+	"os"
+	"path"
 	"time"
 
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
@@ -41,37 +42,38 @@ func (z *_zap) GetEncoderConfig() zapcore.EncoderConfig {
 
 // GetEncoderCore 获取Encoder的 zapcore.Core
 func (z *_zap) GetEncoderCore(l zapcore.Level, level zap.LevelEnablerFunc) zapcore.Core {
+	filePath := path.Join(Cfg.Logger.Director, "%Y-%m-%d", l.String()+".log")
 
-	path := Cfg.Logger.Director
-	if strings.HasSuffix(Cfg.Logger.Director, "/") {
-		path += "access"
-	} else {
-		path += "/access"
+	w, err := getWriter(filePath)
+	if err != nil {
+		fmt.Printf("Get Write Syncer Failed err:%v", err.Error())
+		return nil
 	}
-
-	w := getWriter(path)
-
-	return zapcore.NewCore(z.GetEncoder(), zapcore.AddSync(w), level)
+	return zapcore.NewCore(z.GetEncoder(), w, level)
 }
 
 // 日志文件切割
-func getWriter(filename string) io.Writer {
+func getWriter(filename string) (zapcore.WriteSyncer, error) {
 	//保存日志30天，每1分钟分割一次日志
 	hook, err := rotatelogs.New(
-		filename+"_%Y%m%d%H%M.log",
-		rotatelogs.WithLinkName(filename),
-		rotatelogs.WithMaxAge(time.Hour*time.Duration(Cfg.Logger.GetMaxAge())),
+		filename,
+		rotatelogs.WithClock(rotatelogs.Local),
+		rotatelogs.WithMaxAge(24*time.Hour*time.Duration(Cfg.Logger.GetMaxAge())),
 		rotatelogs.WithRotationTime(time.Hour*24),
 	)
-	if err != nil {
-		panic(err)
+	if Cfg.Logger.LogInConsole {
+		return zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(hook)), err
 	}
-	return hook
+	return zapcore.AddSync(hook), err
 }
 
 // CustomTimeEncoder 自定义日志输出时间格式
 func (z *_zap) CustomTimeEncoder(t time.Time, encoder zapcore.PrimitiveArrayEncoder) {
-	encoder.AppendString(Cfg.Logger.Prefix + t.Format("2006/01/02 - 15:04:05.000"))
+	if Cfg.Logger.Prefix == "" {
+		encoder.AppendString(t.Format("2006/01/02 - 15:04:05.000"))
+	} else {
+		encoder.AppendString(Cfg.Logger.Prefix + t.Format("2006/01/02 - 15:04:05.000"))
+	}
 }
 
 // GetZapCores 根据配置文件的Level获取 []zapcore.Core

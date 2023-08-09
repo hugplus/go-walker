@@ -81,8 +81,8 @@ func Run(appRs *[]func()) {
 	srv := &http.Server{
 		Addr:           addr,
 		Handler:        GetEngine(),
-		ReadTimeout:    time.Duration(Cfg.Server.GetReadTimeout()),
-		WriteTimeout:   time.Duration(Cfg.Server.GetWriteTimeout()),
+		ReadTimeout:    time.Duration(Cfg.Server.GetReadTimeout()) * time.Second,
+		WriteTimeout:   time.Duration(Cfg.Server.GetWriteTimeout()) * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 

@@ -1,5 +1,7 @@
 package config
 
+import "gorm.io/gorm/logger"
+
 type DBCfg struct {
 	DSN          string `mapstructure:"dns" json:"dsn" yaml:"dsn"`                                  //连接参数
 	Disable      bool   `mapstructure:"disable" json:"disable" yaml:"disable"`                      //是否启用 默认true
@@ -11,6 +13,21 @@ type DBCfg struct {
 	MaxLifetime  int    `mapstructure:"max-lifetime" json:"max-lifetime" yaml:"max-lifetime"`       // 链接重置时间（分）
 	LogMode      string `mapstructure:"log-mode" json:"log-mode" yaml:"log-mode"`                   // 是否开启Gorm全局日志
 	LogZap       bool   `mapstructure:"log-zap" json:"log-zap" yaml:"log-zap"`                      // 是否通过zap写入日志文件
+	//Tables       []string `mapstructure:"tables" json:"tables" yaml:"tables"`                         // 多库表映射到库
+}
+
+func (c *DBCfg) GetLogMode() logger.LogLevel {
+	switch c.LogMode {
+	case "silent":
+		return logger.Silent
+	case "error":
+		return logger.Error
+	case "warn":
+		return logger.Warn
+	default:
+		return logger.Info
+
+	}
 }
 
 func (c *DBCfg) GetMaxIdleConns() int {
