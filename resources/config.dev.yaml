@@ -20,8 +20,8 @@ jwt:                # JWT配置
   expires: 10080    # Token过期时长（单位：分钟）
   refresh: 14400    # Token 刷新时长（单位：分钟）
 cache:              # 缓存配置
-  addr: 192.168.0.191:6379    # Redis服务器地址
-  password: redis             # Redis密码
+  addr: localhost:6379    # Redis服务器地址
+  password:              # Redis密码
   db: 5                       # Redis数据库索引
 dbs: # 数据库配置
   - master:
