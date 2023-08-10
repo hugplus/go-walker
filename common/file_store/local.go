@@ -15,8 +15,14 @@ import (
 	"go.uber.org/zap"
 )
 
+func NewLocal(cfg *config.FSCfg) *Local {
+	return &Local{
+		cfg: cfg,
+	}
+}
+
 type Local struct {
-	cfg config.Local
+	cfg *config.FSCfg
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -44,7 +50,7 @@ func (e *Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	}
 	// 拼接路径和文件名
 	p := e.cfg.StorePath + "/" + filename
-	filepath := e.cfg.Path + "/" + filename
+	filepath := e.cfg.PathPrefix + "/" + filename
 
 	f, openError := file.Open() // 读取文件
 	if openError != nil {

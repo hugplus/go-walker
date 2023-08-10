@@ -48,6 +48,9 @@ func run() {
 	if err = v.Unmarshal(&core.Cfg); err != nil {
 		fmt.Println(err)
 	}
+
+	fmt.Println(core.Cfg)
+
 	core.Init()
 	core.Run(&AppRouters)
 }

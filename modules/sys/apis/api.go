@@ -2,22 +2,25 @@ package apis
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/hugplus/go-walker/common/api"
-	"github.com/hugplus/go-walker/common/api/resp"
+	"github.com/hugplus/go-walker/common/base"
+	"github.com/hugplus/go-walker/common/base/resp"
 	"github.com/hugplus/go-walker/common/utils"
 	"github.com/hugplus/go-walker/core"
+	"github.com/hugplus/go-walker/modules/sys/models"
+	"github.com/hugplus/go-walker/modules/sys/service"
+	"github.com/hugplus/go-walker/modules/sys/service/dto"
 	"go.uber.org/zap"
 )
 
 type SysApi struct {
-	api.BaseApi
+	base.BaseApi
 }
 
 // Ping Ping接口
 // @Summary Ping接口
 // @Description Ping接口
 // @Tags Default
-// @Success 200 {object} response.Response{data=utils.Server}} "{"code": 200, "data": [...]}"
+// @Success 200 {object} resp.Resp{data=utils.Server} "{"code": 200, "data": [...]}"
 // @Router /api/v1/ping [get]
 func (e *SysApi) Ping(c *gin.Context) {
 	cpu, err := utils.InitCPU()
@@ -39,4 +42,39 @@ func (e *SysApi) Ping(c *gin.Context) {
 		Disk: disk,
 	}
 	resp.Ok(c, server)
+}
+
+// init init接口
+// @Summary init接口
+// @Description init接口
+// @Tags Default
+// @Success 200 {object} resp.Resp{data=string} "{"code": 200, "data": [...]}"
+// @Router /api/v1/init [get]
+func (e *SysApi) Init(c *gin.Context) {
+	// core.DB().AutoMigrate(
+	// // models.CasbinRule{},
+	// // models.DictData{},
+	// // models.DictType{},
+	// // models.SysRole{},
+	// // models.SysApi{},
+	// // models.SysConfig{},
+	// // models.SysDept{},
+	// // models.SysColumns{},
+	// // models.SysJob{},
+	// // models.SysLoginLog{},
+	// // models.SysMenu{},
+	// // models.SysOperaLog{},
+	// // models.SysPost{},
+	// // models.SysRoleDept{},
+	// // models.SysTables{},
+	// // models.SysUser{},
+	// // models.SysPost{},
+	// // models.SysLoginLog{},
+	// )
+	var req dto.SysDto
+	c.ShouldBind(&req)
+	var data models.Sys
+	data.Name = req.Name
+	service.Sys.Ping(e.GetReqId(c), &data)
+	resp.Ok(c, data)
 }

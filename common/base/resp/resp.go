@@ -13,7 +13,7 @@ const (
 	OK_MSG     = "ok"
 )
 
-type resp struct {
+type Resp struct {
 	ReqId string `json:"reqId"`
 	Code  int    `json:"code"`
 	Msg   string `json:"msg"`
@@ -30,7 +30,7 @@ type PageResp struct {
 type RespFunc func()
 
 func Ok(c *gin.Context, data any) {
-	c.AbortWithStatusJSON(http.StatusOK, resp{
+	c.AbortWithStatusJSON(http.StatusOK, Resp{
 		ReqId: c.GetString(consts.REQ_ID),
 		Code:  OK_CODE,
 		Msg:   OK_MSG,
@@ -39,7 +39,7 @@ func Ok(c *gin.Context, data any) {
 }
 
 func Fail(c *gin.Context, code int, msg string, data ...any) {
-	c.AbortWithStatusJSON(http.StatusOK, resp{
+	c.AbortWithStatusJSON(http.StatusOK, Resp{
 		ReqId: c.GetString(consts.REQ_ID),
 		Code:  code,
 		Msg:   msg,

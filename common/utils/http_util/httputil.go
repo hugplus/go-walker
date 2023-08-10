@@ -2,7 +2,7 @@ package http_util
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -30,19 +30,6 @@ func (c *HTTPClient) Get(endpoint string) ([]byte, error) {
 		req.Header.Set(key, value)
 	}
 	return do(req)
-	// client := &http.Client{}
-	// resp, err := client.Do(req)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// defer resp.Body.Close()
-
-	// body, err := ioutil.ReadAll(resp.Body)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// return body, nil
 }
 
 // Post 发送POST请求
@@ -76,7 +63,7 @@ func do(req *http.Request) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}

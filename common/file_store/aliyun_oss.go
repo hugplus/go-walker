@@ -11,8 +11,14 @@ import (
 	"go.uber.org/zap"
 )
 
+func NewOss(cfg *config.FSCfg) *AliyunOSS {
+	return &AliyunOSS{
+		cfg: cfg,
+	}
+}
+
 type AliyunOSS struct {
-	cfg config.AliyunOSS
+	cfg *config.FSCfg
 }
 
 func (e *AliyunOSS) UploadFile(file *multipart.FileHeader) (string, string, error) {
@@ -31,7 +37,7 @@ func (e *AliyunOSS) UploadFile(file *multipart.FileHeader) (string, string, erro
 	defer f.Close() // 创建文件 defer 关闭
 	// 上传阿里云路径 文件名格式 自己可以改 建议保证唯一性
 	// yunFileTmpPath := filepath.Join("uploads", time.Now().Format("2006-01-02")) + "/" + file.Filename
-	yunFileTmpPath := e.cfg.BasePath + "/" + "uploads" + "/" + time.Now().Format("2006-01-02") + "/" + file.Filename
+	yunFileTmpPath := e.cfg.PathPrefix + "/" + "uploads" + "/" + time.Now().Format("2006-01-02") + "/" + file.Filename
 
 	// 上传文件流。
 	err = bucket.PutObject(yunFileTmpPath, f)
@@ -40,7 +46,7 @@ func (e *AliyunOSS) UploadFile(file *multipart.FileHeader) (string, string, erro
 		return "", "", errors.New("function formUploader.Put() Failed, err:" + err.Error())
 	}
 
-	return e.cfg.BucketUrl + "/" + yunFileTmpPath, yunFileTmpPath, nil
+	return e.cfg.BaseURL + "/" + yunFileTmpPath, yunFileTmpPath, nil
 }
 
 func (e *AliyunOSS) DeleteFile(key string) error {
@@ -61,15 +67,15 @@ func (e *AliyunOSS) DeleteFile(key string) error {
 	return nil
 }
 
-func NewBucket(cfg config.AliyunOSS) (*oss.Bucket, error) {
+func NewBucket(cfg *config.FSCfg) (*oss.Bucket, error) {
 	// 创建OSSClient实例。
-	client, err := oss.New(cfg.Endpoint, cfg.AccessKeyId, cfg.AccessKeySecret)
+	client, err := oss.New(cfg.Endpoint, cfg.SecretID, cfg.SecretKey)
 	if err != nil {
 		return nil, err
 	}
 
 	// 获取存储空间。
-	bucket, err := client.Bucket(cfg.BucketName)
+	bucket, err := client.Bucket(cfg.Bucket)
 	if err != nil {
 		return nil, err
 	}

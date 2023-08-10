@@ -1,35 +1,44 @@
 package file_store
 
 import (
+	"fmt"
 	"mime/multipart"
+
+	"github.com/hugplus/go-walker/common/file_store/config"
 )
 
 // OSS 对象存储接口
-// Author [SliverHorn](https://github.com/SliverHorn)
-// Author [ccfish86](https://github.com/ccfish86)
 type OSS interface {
 	UploadFile(file *multipart.FileHeader) (string, string, error)
 	DeleteFile(key string) error
 }
 
+var fsCfg config.FSCfg
+
+func InitCfg() {
+	if fsCfg.SecretID == "" {
+		//TODO
+		fmt.Println("这里需要配置")
+	}
+}
+
 // NewOss OSS的实例化方法
-// Author [SliverHorn](https://github.com/SliverHorn)
-// Author [ccfish86](https://github.com/ccfish86)
-func NewOss(ossType string) OSS {
+func NewFs(ossType string) OSS {
+	InitCfg()
 	switch ossType {
 	case "local":
-		return &Local{}
+		return NewLocal(&fsCfg)
 	case "qiniu":
-		return &Qiniu{}
-	case "tencent-cos":
-		return &TencentCOS{}
-	case "aliyun-oss":
-		return &AliyunOSS{}
-	case "huawei-obs":
-		return HuaWeiObs
-	case "aws-s3":
-		return &AwsS3{}
+		return NewQiniu(&fsCfg)
+	case "tencent":
+		return NewCOS(&fsCfg)
+	case "aliyun":
+		return NewOss(&fsCfg)
+	case "huawei":
+		return NewOBS(&fsCfg)
+	case "aws":
+		return NewS3(&fsCfg)
 	default:
-		return &Local{}
+		return NewLocal(&fsCfg)
 	}
 }

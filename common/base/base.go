@@ -1,8 +1,8 @@
-package api
+package base
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/hugplus/go-walker/common/api/resp"
+	"github.com/hugplus/go-walker/common/base/resp"
 	"github.com/hugplus/go-walker/common/consts"
 	"github.com/hugplus/go-walker/common/utils"
 )

@@ -16,8 +16,14 @@ import (
 	"go.uber.org/zap"
 )
 
+func NewCOS(cfg *config.FSCfg) *TencentCOS {
+	return &TencentCOS{
+		cfg: cfg,
+	}
+}
+
 type TencentCOS struct {
-	cfg *config.TencentCOS
+	cfg *config.FSCfg
 }
 
 // UploadFile upload file to COS
@@ -51,7 +57,7 @@ func (e *TencentCOS) DeleteFile(key string) error {
 }
 
 // NewClient init COS client
-func NewClient(cfg *config.TencentCOS) *cos.Client {
+func NewClient(cfg *config.FSCfg) *cos.Client {
 	urlStr, _ := url.Parse("https://" + cfg.Bucket + ".cos." + cfg.Region + ".myqcloud.com")
 	baseURL := &cos.BaseURL{BucketURL: urlStr}
 	client := cos.NewClient(baseURL, &http.Client{

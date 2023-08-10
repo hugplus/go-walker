@@ -17,8 +17,14 @@ import (
 	"go.uber.org/zap"
 )
 
+func NewS3(cfg *config.FSCfg) *AwsS3 {
+	return &AwsS3{
+		cfg: cfg,
+	}
+}
+
 type AwsS3 struct {
-	cfg config.AwsS3
+	cfg *config.FSCfg
 }
 
 //@author: [WqyJh](https://github.com/WqyJh)
@@ -84,7 +90,7 @@ func (e *AwsS3) DeleteFile(key string) error {
 }
 
 // newSession Create S3 session
-func newSession(cfg config.AwsS3) *session.Session {
+func newSession(cfg *config.FSCfg) *session.Session {
 	sess, _ := session.NewSession(&aws.Config{
 		Region:           aws.String(cfg.Region),
 		Endpoint:         aws.String(cfg.Endpoint), //minio在这里设置地址,可以兼容

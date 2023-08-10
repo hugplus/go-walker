@@ -30,5 +30,6 @@ func sysNoCheckRoleRouter(v1 *gin.RouterGroup) {
 	r := v1.Group("")
 	{
 		r.GET("/ping", api.Ping)
+		r.GET("init", api.Init)
 	}
 }

@@ -1,5 +1,7 @@
 package models
 
+import "github.com/hugplus/go-walker/common/base"
+
 type SysRole struct {
 	RoleId    int       `json:"roleId" gorm:"primaryKey;autoIncrement"` // 角色编码
 	RoleName  string    `json:"roleName" gorm:"size:128;"`              // 角色名称
@@ -11,8 +13,8 @@ type SysRole struct {
 	Admin     bool      `json:"admin" gorm:"size:4;"`
 	DataScope string    `json:"dataScope" gorm:"size:128;"`
 	SysMenu   []SysMenu `json:"sysMenu" gorm:"many2many:sys_role_menu;foreignKey:RoleId;joinForeignKey:role_id;references:MenuId;joinReferences:menu_id;"`
-	ControlBy
-	ModelTime
+	base.ControlBy
+	base.ModelTime
 }
 
 func (SysRole) TableName() string {

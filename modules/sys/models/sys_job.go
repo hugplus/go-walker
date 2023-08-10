@@ -1,5 +1,7 @@
 package models
 
+import "github.com/hugplus/go-walker/common/base"
+
 type SysJob struct {
 	JobId          int    `json:"jobId" gorm:"primaryKey;autoIncrement"` // 编码
 	JobName        string `json:"jobName" gorm:"size:255;"`              // 名称
@@ -12,8 +14,8 @@ type SysJob struct {
 	Concurrent     int    `json:"concurrent" gorm:"size:1;"`             // 是否并发
 	Status         int    `json:"status" gorm:"size:1;"`                 // 状态
 	EntryId        int    `json:"entry_id" gorm:"size:11;"`              // job启动时返回的id
-	ModelTime
-	ControlBy
+	base.ModelTime
+	base.ControlBy
 }
 
 func (SysJob) TableName() string {

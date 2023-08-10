@@ -14,6 +14,6 @@ func sysNoCheckRoleRouter(v1 *gin.RouterGroup) {
 	api := apis.DemoApi{}
 	r := v1.Group("demo")
 	{
-		r.GET("/ping", api.Ping)
+		r.POST("/ping", api.Ping)
 	}
 }

@@ -1,0 +1,2 @@
+2023/08/09 - 21:52:12.830	info	D:/works/gos/go-walker/core/dblog.go:104	sql trace	{"sql": "INSERT INTO `sys` (`name`) VALUES ('123321')", "time": "4.2286ms", "rows": 1}
+2023/08/09 - 22:05:11.576	info	D:/works/gos/go-walker/core/dblog.go:104	sql trace	{"sql": "INSERT INTO `sys` (`name`) VALUES ('goodsboy')", "time": "3.2171ms", "rows": 1}

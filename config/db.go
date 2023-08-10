@@ -1,32 +1,47 @@
 package config
 
-import "gorm.io/gorm/logger"
+import (
+	"strings"
 
-type DBCfg struct {
-	DSN          string `mapstructure:"dns" json:"dsn" yaml:"dsn"`                                  //连接参数
-	Disable      bool   `mapstructure:"disable" json:"disable" yaml:"disable"`                      //是否启用 默认true
-	Driver       string `mapstructure:"driver" json:"driver" yaml:"driver"`                         //数据库类型
-	Prefix       string `mapstructure:"prefix" json:"prefix" yaml:"prefix"`                         //全局表前缀，单独定义TableName则不生效
-	Singular     bool   `mapstructure:"singular" json:"singular" yaml:"singular"`                   //是否开启全局禁用复数，true表示开启
-	MaxIdleConns int    `mapstructure:"max-idle-conns" json:"max-idle-conns" yaml:"max-idle-conns"` // 空闲中的最大连接数
-	MaxOpenConns int    `mapstructure:"max-open-conns" json:"max-open-conns" yaml:"max-open-conns"` // 打开到数据库的最大连接数
-	MaxLifetime  int    `mapstructure:"max-lifetime" json:"max-lifetime" yaml:"max-lifetime"`       // 链接重置时间（分）
-	LogMode      string `mapstructure:"log-mode" json:"log-mode" yaml:"log-mode"`                   // 是否开启Gorm全局日志
-	LogZap       bool   `mapstructure:"log-zap" json:"log-zap" yaml:"log-zap"`                      // 是否通过zap写入日志文件
+	"gorm.io/gorm/logger"
+)
+
+type DB struct {
+	DSN           string `mapstructure:"dns" json:"dsn" yaml:"dsn"`                                  //连接参数
+	Disable       bool   `mapstructure:"disable" json:"disable" yaml:"disable"`                      //是否启用 默认true
+	Driver        string `mapstructure:"driver" json:"driver" yaml:"driver"`                         //数据库类型
+	Prefix        string `mapstructure:"prefix" json:"prefix" yaml:"prefix"`                         //全局表前缀，单独定义TableName则不生效
+	MaxIdleConns  int    `mapstructure:"max-idle-conns" json:"max-idle-conns" yaml:"max-idle-conns"` // 空闲中的最大连接数
+	MaxOpenConns  int    `mapstructure:"max-open-conns" json:"max-open-conns" yaml:"max-open-conns"` // 打开到数据库的最大连接数
+	MaxLifetime   int    `mapstructure:"max-lifetime" json:"max-lifetime" yaml:"max-lifetime"`       // 链接重置时间（分）
+	LogMode       string `mapstructure:"log-mode" json:"log-mode" yaml:"log-mode"`                   // Gorm日志级别： silent、error、warn、info
+	SlowThreshold int    `mapstructure:"slow-threshold" json:"slow-threshold" yaml:"slow-threshold"` // 慢查询 毫秒 大于0有效
 	//Tables       []string `mapstructure:"tables" json:"tables" yaml:"tables"`                         // 多库表映射到库
 }
 
-func (c *DBCfg) GetLogMode() logger.LogLevel {
-	switch c.LogMode {
+type DBCfg struct {
+	DSN           string        `mapstructure:"dns" json:"dsn" yaml:"dsn"`                                  //连接参数
+	Driver        string        `mapstructure:"driver" json:"driver" yaml:"driver"`                         //数据库类型
+	Prefix        string        `mapstructure:"prefix" json:"prefix" yaml:"prefix"`                         //全局表前缀，单独定义TableName则不生效
+	Singular      bool          `mapstructure:"singular" json:"singular" yaml:"singular"`                   //是否开启全局禁用复数，true表示开启
+	MaxIdleConns  int           `mapstructure:"max-idle-conns" json:"max-idle-conns" yaml:"max-idle-conns"` // 空闲中的最大连接数
+	MaxOpenConns  int           `mapstructure:"max-open-conns" json:"max-open-conns" yaml:"max-open-conns"` // 打开到数据库的最大连接数
+	MaxLifetime   int           `mapstructure:"max-lifetime" json:"max-lifetime" yaml:"max-lifetime"`       // 链接重置时间（分）
+	LogMode       string        `mapstructure:"log-mode" json:"log-mode" yaml:"log-mode"`                   // Gorm日志级别： silent、error、warn、info
+	SlowThreshold int           `mapstructure:"slow-threshold" json:"slow-threshold" yaml:"slow-threshold"` // 慢查询 毫秒 大于0有效
+	DBS           map[string]DB `mapstructure:"dbs" json:"dbs" yaml:"dbs"`                                  //配置多db
+}
+
+func GetLogMode(logmode string) logger.LogLevel {
+	switch strings.ToLower(logmode) {
 	case "silent":
 		return logger.Silent
 	case "error":
 		return logger.Error
-	case "warn":
-		return logger.Warn
-	default:
+	case "info":
 		return logger.Info
-
+	default:
+		return logger.Warn
 	}
 }
 

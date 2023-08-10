@@ -1,9 +1,15 @@
 package router
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/hugplus/go-walker/core"
-	//common "go-admin/common/middleware"
+
+	"github.com/hugplus/go-walker/docs"
+
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 var (
@@ -14,6 +20,11 @@ var (
 // InitRouter 路由初始化，不要怀疑，这里用到了
 func InitRouter() {
 	r := core.GetGinEngine()
+	if core.Cfg.Server.Mode != core.ModeProd.String() {
+		//初始化swagger
+		fmt.Printf("Swagger %s %s start\r\n", docs.SwaggerInfo.Title, docs.SwaggerInfo.Version)
+		r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	}
 	noCheckRoleRouter(r)
 }
 

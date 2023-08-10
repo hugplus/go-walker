@@ -44,7 +44,7 @@ func (z *_zap) GetEncoderConfig() zapcore.EncoderConfig {
 func (z *_zap) GetEncoderCore(l zapcore.Level, level zap.LevelEnablerFunc) zapcore.Core {
 	filePath := path.Join(Cfg.Logger.Director, "%Y-%m-%d", l.String()+".log")
 
-	w, err := getWriter(filePath)
+	w, err := GetWriter(filePath)
 	if err != nil {
 		fmt.Printf("Get Write Syncer Failed err:%v", err.Error())
 		return nil
@@ -53,7 +53,7 @@ func (z *_zap) GetEncoderCore(l zapcore.Level, level zap.LevelEnablerFunc) zapco
 }
 
 // 日志文件切割
-func getWriter(filename string) (zapcore.WriteSyncer, error) {
+func GetWriter(filename string) (zapcore.WriteSyncer, error) {
 	//保存日志30天，每1分钟分割一次日志
 	hook, err := rotatelogs.New(
 		filename,

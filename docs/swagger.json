@@ -1,0 +1,213 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "一个简单的脚手",
+        "title": "go-walker API",
+        "contact": {},
+        "version": "V0.0.1"
+    },
+    "paths": {
+        "/api/v1/demo/ping": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Demo"
+                ],
+                "summary": "Ping接口",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.DemoDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/resp.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/models.Demo"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/ping": {
+            "get": {
+                "description": "Ping接口",
+                "tags": [
+                    "Default"
+                ],
+                "summary": "Ping接口",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/resp.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/utils.Server"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.DemoDto": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Demo": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "resp.Resp": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "msg": {
+                    "type": "string"
+                },
+                "reqId": {
+                    "type": "string"
+                }
+            }
+        },
+        "utils.Cpu": {
+            "type": "object",
+            "properties": {
+                "cores": {
+                    "type": "integer"
+                },
+                "cpus": {
+                    "type": "array",
+                    "items": {
+                        "type": "number"
+                    }
+                }
+            }
+        },
+        "utils.Disk": {
+            "type": "object",
+            "properties": {
+                "totalGb": {
+                    "type": "integer"
+                },
+                "totalMb": {
+                    "type": "integer"
+                },
+                "usedGb": {
+                    "type": "integer"
+                },
+                "usedMb": {
+                    "type": "integer"
+                },
+                "usedPercent": {
+                    "type": "integer"
+                }
+            }
+        },
+        "utils.Os": {
+            "type": "object",
+            "properties": {
+                "compiler": {
+                    "type": "string"
+                },
+                "goVersion": {
+                    "type": "string"
+                },
+                "goos": {
+                    "type": "string"
+                },
+                "numCpu": {
+                    "type": "integer"
+                },
+                "numGoroutine": {
+                    "type": "integer"
+                }
+            }
+        },
+        "utils.Ram": {
+            "type": "object",
+            "properties": {
+                "totalMb": {
+                    "type": "integer"
+                },
+                "usedMb": {
+                    "type": "integer"
+                },
+                "usedPercent": {
+                    "type": "integer"
+                }
+            }
+        },
+        "utils.Server": {
+            "type": "object",
+            "properties": {
+                "cpu": {
+                    "$ref": "#/definitions/utils.Cpu"
+                },
+                "disk": {
+                    "$ref": "#/definitions/utils.Disk"
+                },
+                "os": {
+                    "$ref": "#/definitions/utils.Os"
+                },
+                "ram": {
+                    "$ref": "#/definitions/utils.Ram"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

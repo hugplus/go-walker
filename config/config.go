@@ -4,10 +4,14 @@ type AppCfg struct {
 	Server ServerCfg         `mapstructure:"server" json:"server" yaml:"server"`
 	Logger LogCfg            `mapstructure:"logger" json:"logger" yaml:"logger"`
 	JWT    JWT               `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
-	DBs    map[string]DBCfg  `mapstructure:"dbs" json:"dbs" yaml:"dbs"`       // 数据库配置
+	DBCfg  DBCfg             `mapstructure:"dbcfg" json:"dbcfg" yaml:"dbcfg"` // 数据库配置
 	Cache  CacheCfg          `mapstructure:"cache" json:"cache" yaml:"cache"` // 缓存
 	Cors   CORS              `mapstructure:"cors" json:"cors" yaml:"cors"`
 	Extend map[string]string `mapstructure:"extend" json:"extend" yaml:"extend"`
+}
+
+func (e *AppCfg) GetExtend(key string) string {
+	return e.Extend[key]
 }
 
 type ServerCfg struct {
@@ -17,6 +21,7 @@ type ServerCfg struct {
 	Port         int    `mapstructure:"port" json:"port" yaml:"port"`
 	ReadTimeout  int    `mapstructure:"read-timeout" json:"read-timeout" yaml:"read-timeout"`
 	WriteTimeout int    `mapstructure:"write-timeout" json:"write-timeout" yaml:"write-timeout"`
+	FSType       string `mapstructure:"fs-type" json:"fs-type" yaml:"fs-type"`
 }
 
 func (e *ServerCfg) GetHost() string {

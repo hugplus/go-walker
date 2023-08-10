@@ -8,14 +8,18 @@ import (
 	"github.com/pkg/errors"
 )
 
-var HuaWeiObs = new(Obs)
-
-type Obs struct {
-	cfg config.HuaWeiObs
+func NewOBS(cfg *config.FSCfg) *Obs {
+	return &Obs{
+		cfg: cfg,
+	}
 }
 
-func NewHuaWeiObsClient(cfg config.HuaWeiObs) (client *obs.ObsClient, err error) {
-	return obs.New(cfg.AccessKey, cfg.SecretKey, cfg.Endpoint)
+type Obs struct {
+	cfg *config.FSCfg
+}
+
+func NewHuaWeiObsClient(cfg *config.FSCfg) (client *obs.ObsClient, err error) {
+	return obs.New(cfg.SecretID, cfg.SecretKey, cfg.Endpoint)
 }
 
 func (o *Obs) UploadFile(file *multipart.FileHeader) (string, string, error) {
@@ -47,7 +51,7 @@ func (o *Obs) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	if err != nil {
 		return "", "", errors.Wrap(err, "文件上传失败!")
 	}
-	filepath := o.cfg.Path + "/" + filename
+	filepath := o.cfg.PathPrefix + "/" + filename
 	return filepath, filename, err
 }
 

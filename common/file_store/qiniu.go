@@ -14,8 +14,14 @@ import (
 	"go.uber.org/zap"
 )
 
+func NewQiniu(cfg *config.FSCfg) *Qiniu {
+	return &Qiniu{
+		cfg: cfg,
+	}
+}
+
 type Qiniu struct {
-	cfg *config.Qiniu
+	cfg *config.FSCfg
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -29,7 +35,7 @@ type Qiniu struct {
 
 func (e *Qiniu) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	putPolicy := storage.PutPolicy{Scope: e.cfg.Bucket}
-	mac := qbox.NewMac(e.cfg.AccessKey, e.cfg.SecretKey)
+	mac := qbox.NewMac(e.cfg.SecretID, e.cfg.SecretKey)
 	upToken := putPolicy.UploadToken(mac)
 	cfg := e.qiniuConfig()
 	formUploader := storage.NewFormUploader(cfg)
@@ -49,7 +55,7 @@ func (e *Qiniu) UploadFile(file *multipart.FileHeader) (string, string, error) {
 		core.Log.Error("function formUploader.Put() Filed", zap.Any("err", putErr.Error()))
 		return "", "", errors.New("function formUploader.Put() Filed, err:" + putErr.Error())
 	}
-	return e.cfg.ImgPath + "/" + ret.Key, ret.Key, nil
+	return e.cfg.BaseURL + "/" + ret.Key, ret.Key, nil
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -62,7 +68,7 @@ func (e *Qiniu) UploadFile(file *multipart.FileHeader) (string, string, error) {
 //@return: error
 
 func (e *Qiniu) DeleteFile(key string) error {
-	mac := qbox.NewMac(e.cfg.AccessKey, e.cfg.SecretKey)
+	mac := qbox.NewMac(e.cfg.SecretID, e.cfg.SecretKey)
 	cfg := e.qiniuConfig()
 	bucketManager := storage.NewBucketManager(mac, cfg)
 	if err := bucketManager.Delete(e.cfg.Bucket, key); err != nil {
@@ -80,10 +86,10 @@ func (e *Qiniu) DeleteFile(key string) error {
 
 func (e *Qiniu) qiniuConfig() *storage.Config {
 	cfg := storage.Config{
-		UseHTTPS:      e.cfg.UseHTTPS,
+		UseHTTPS:      e.cfg.DisableSSL,
 		UseCdnDomains: e.cfg.UseCdnDomains,
 	}
-	switch e.cfg.Zone { // 根据配置文件进行初始化空间对应的机房
+	switch e.cfg.Region { // 根据配置文件进行初始化空间对应的机房
 	case "ZoneHuadong":
 		cfg.Zone = &storage.ZoneHuadong
 	case "ZoneHuabei":
