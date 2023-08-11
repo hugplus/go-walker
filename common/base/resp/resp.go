@@ -5,13 +5,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hugplus/go-walker/common/consts"
+	"github.com/hugplus/go-walker/common/errors"
 )
 
-const (
-	OK_CODE    = 200
-	ERROR_CODE = 500
-	OK_MSG     = "ok"
-)
+// const (
+// 	OK_CODE    = 200
+// 	ERROR_CODE = 500
+// 	OK_MSG     = "ok"
+// )
 
 type Resp struct {
 	ReqId string `json:"reqId"`
@@ -32,10 +33,14 @@ type RespFunc func()
 func Ok(c *gin.Context, data any) {
 	c.AbortWithStatusJSON(http.StatusOK, Resp{
 		ReqId: c.GetString(consts.REQ_ID),
-		Code:  OK_CODE,
-		Msg:   OK_MSG,
+		Code:  errors.SUCCESS,
+		Msg:   errors.MSG_OK,
 		Data:  data,
 	})
+}
+
+func Err(c *gin.Context, err errors.BusinessError) {
+	Fail(c, err.GetCode(), err.GetMessage())
 }
 
 func Fail(c *gin.Context, code int, msg string, data ...any) {

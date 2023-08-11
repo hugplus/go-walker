@@ -72,9 +72,16 @@ func (e *SysApi) Init(c *gin.Context) {
 	// // models.SysLoginLog{},
 	// )
 	var req dto.SysDto
-	c.ShouldBind(&req)
+	if err := c.ShouldBind(&req); err != nil {
+
+		e.Error(c, err)
+		return
+	}
 	var data models.Sys
 	data.Name = req.Name
-	service.Sys.Ping(e.GetReqId(c), &data)
+	if err := service.Sys.Ping(e.GetReqId(c), &data); err != nil {
+		resp.Fail(c, 500, "错误了")
+		return
+	}
 	resp.Ok(c, data)
 }

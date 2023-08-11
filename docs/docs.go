@@ -58,6 +58,35 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/init": {
+            "get": {
+                "description": "init接口",
+                "tags": [
+                    "Default"
+                ],
+                "summary": "init接口",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/resp.Resp"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/ping": {
             "get": {
                 "description": "Ping接口",
@@ -91,11 +120,30 @@ const docTemplate = `{
     "definitions": {
         "dto.DemoDto": {
             "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password",
+                "re_password"
+            ],
             "properties": {
+                "age": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 6
+                },
+                "re_password": {
                     "type": "string"
                 }
             }

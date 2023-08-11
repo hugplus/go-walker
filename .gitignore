@@ -6,13 +6,13 @@ main.exe
 *.exe
 go-admin
 go-admin.exe
-temp/*
+temp/
 !temp
 vendor
 config/settings.dev.yml
 config/settings.dev.*.yml
 config/settings.dev.*.yml.log
-temp/**.log
+temp/logs
 config/settings.dev.yml.log
 config/settings.b.dev.yml
 cmd/migrate/migration/version-local/*

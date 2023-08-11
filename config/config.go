@@ -22,6 +22,14 @@ type ServerCfg struct {
 	ReadTimeout  int    `mapstructure:"read-timeout" json:"read-timeout" yaml:"read-timeout"`
 	WriteTimeout int    `mapstructure:"write-timeout" json:"write-timeout" yaml:"write-timeout"`
 	FSType       string `mapstructure:"fs-type" json:"fs-type" yaml:"fs-type"`
+	Lang         string `mapstructure:"lang" json:"lang" yaml:"lang"`
+}
+
+func (e *ServerCfg) GetLang() string {
+	if e.Lang == "" {
+		return "zh"
+	}
+	return e.Lang
 }
 
 func (e *ServerCfg) GetHost() string {

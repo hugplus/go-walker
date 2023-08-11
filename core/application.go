@@ -16,6 +16,7 @@ import (
 	"github.com/hugplus/go-walker/common/utils"
 	"github.com/hugplus/go-walker/config"
 	"github.com/hugplus/go-walker/core/cache"
+	"github.com/hugplus/go-walker/docs"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -95,6 +96,7 @@ func Run(appRs *[]func()) {
 	fmt.Println("Server started ,Listen: " + addr)
 
 	if Cfg.Server.Mode != ModeProd.String() {
+		fmt.Printf("Swagger %s %s start\r\n", docs.SwaggerInfo.Title, docs.SwaggerInfo.Version)
 		fmt.Printf("Swagger: http://localhost:%d/swagger/index.html \r\n", Cfg.Server.Port)
 		ip := utils.GetLocalHost()
 		if ip != "" {

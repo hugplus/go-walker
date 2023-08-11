@@ -18,13 +18,13 @@ func (s *SysServ) Ping(reqId string, d *models.Sys) error {
 	cstr, err := core.Cache.Get("test")
 	if err != nil || cstr == "" {
 		if err := core.Cache.Set("test", d, time.Hour); err != nil {
-			core.Log.Error("REQID:"+reqId, zap.Error(err))
+			core.Log.Error(base.FmtReqId(reqId), zap.Error(err))
 			return err
 		}
 	}
 
 	if err := core.DB().Create(&d).Error; err != nil {
-		core.Log.Error("REQID:"+reqId, zap.Error(err))
+		core.Log.Error(base.FmtReqId(reqId), zap.Error(err))
 		return err
 	}
 	return nil

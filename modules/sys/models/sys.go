@@ -10,5 +10,3 @@ type Sys struct {
 func (m Sys) MarshalBinary() ([]byte, error) {
 	return json.Marshal(m)
 }
-
-// func (m *Sys) MarshalBinary()
