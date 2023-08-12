@@ -5,20 +5,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hugplus/go-walker/common/consts"
-	"github.com/hugplus/go-walker/common/errors"
+	"github.com/hugplus/go-walker/common/errs"
+	"github.com/hugplus/go-walker/common/errs/codes"
 )
-
-// const (
-// 	OK_CODE    = 200
-// 	ERROR_CODE = 500
-// 	OK_MSG     = "ok"
-// )
 
 type Resp struct {
 	ReqId string `json:"reqId"`
 	Code  int    `json:"code"`
-	Msg   string `json:"msg"`
-	Data  any    `json:"data"`
+	Msg   string `json:"msg,omitempty"`
+	Data  any    `json:"data,omitempty"`
 }
 
 type PageResp struct {
@@ -33,14 +28,14 @@ type RespFunc func()
 func Ok(c *gin.Context, data any) {
 	c.AbortWithStatusJSON(http.StatusOK, Resp{
 		ReqId: c.GetString(consts.REQ_ID),
-		Code:  errors.SUCCESS,
-		Msg:   errors.MSG_OK,
+		Code:  codes.SUCCESS,
+		Msg:   codes.MSG_OK,
 		Data:  data,
 	})
 }
 
-func Err(c *gin.Context, err errors.BusinessError) {
-	Fail(c, err.GetCode(), err.GetMessage())
+func Err(c *gin.Context, err errs.IError) {
+	Fail(c, err.Code(), err.Msg())
 }
 
 func Fail(c *gin.Context, code int, msg string, data ...any) {

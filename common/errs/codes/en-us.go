@@ -1,4 +1,4 @@
-package errors
+package codes
 
 var enUSText = map[int]string{
 	SUCCESS:            "OK",

@@ -73,14 +73,13 @@ func (e *SysApi) Init(c *gin.Context) {
 	// )
 	var req dto.SysDto
 	if err := c.ShouldBind(&req); err != nil {
-
 		e.Error(c, err)
 		return
 	}
 	var data models.Sys
 	data.Name = req.Name
 	if err := service.Sys.Ping(e.GetReqId(c), &data); err != nil {
-		resp.Fail(c, 500, "错误了")
+		e.Err(c, err)
 		return
 	}
 	resp.Ok(c, data)

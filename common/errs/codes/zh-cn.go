@@ -1,4 +1,4 @@
-package errors
+package codes
 
 var zhCNText = map[int]string{
 	SUCCESS:            "OK",

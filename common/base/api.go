@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/hugplus/go-walker/common/base/resp"
 	"github.com/hugplus/go-walker/common/consts"
+	"github.com/hugplus/go-walker/common/errs"
+	"github.com/hugplus/go-walker/common/errs/codes"
 	"github.com/hugplus/go-walker/common/utils"
 )
 
@@ -23,8 +25,23 @@ func (e *BaseApi) GetTenantId(c *gin.Context) int {
 }
 
 func (e *BaseApi) Error(c *gin.Context, err error) {
-	//e.LogError(c, err)
-	resp.Fail(c, resp.ERROR_CODE, err.Error())
+	resp.Fail(c, codes.FAILURE, err.Error())
+}
+
+func (e *BaseApi) WithCodeError(c *gin.Context, code int, err error) {
+	resp.Fail(c, code, err.Error())
+}
+
+func (e *BaseApi) Fail(c *gin.Context, code int, msg string, data ...any) {
+	resp.Fail(c, code, msg, data)
+}
+
+func (e *BaseApi) Err(c *gin.Context, err errs.IError) {
+	resp.Err(c, err)
+}
+
+func (e *BaseApi) Ok(c *gin.Context, data any) {
+	resp.Ok(c, data)
 }
 
 //封装后代码路径指定到这里所以去掉
