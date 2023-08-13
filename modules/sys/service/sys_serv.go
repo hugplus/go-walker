@@ -20,14 +20,16 @@ func (s *SysServ) Ping(reqId string, d *models.Sys) errs.IError {
 	cstr, err := core.Cache.Get("test")
 	if err != nil || cstr == "" {
 		if err := core.Cache.Set("test", d, time.Hour); err != nil {
-			core.Log.Error(base.FmtReqId(reqId), zap.Error(err))
-			return errs.Err(codes.FAILURE, reqId, err)
+			berr := errs.Err(codes.FAILURE, reqId, err)
+			core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
+			return berr
 		}
 	}
 
 	if err := core.DB().Create(&d).Error; err != nil {
-		core.Log.Error(base.FmtReqId(reqId), zap.Error(err))
-		return errs.Err(codes.FAILURE, reqId, err)
+		berr := errs.Err(codes.FAILURE, reqId, err)
+		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
+		return berr
 	}
 	return nil
 }

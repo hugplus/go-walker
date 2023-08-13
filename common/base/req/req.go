@@ -13,11 +13,11 @@ type StrIdReq struct {
 }
 
 type IdsReq struct {
-	Ids []int `json:"ids" form:"ids"`
+	Ids []int `json:"ids" form:"ids"` //多id
 }
 
 type PageInfo struct {
-	Page     int    `json:"page" form:"page"`         // 页码
-	PageSize int    `json:"pageSize" form:"pageSize"` // 每页大小
-	Keyword  string `json:"keyword" form:"keyword"`   //关键字
+	Page    int    `json:"page" form:"page"`       // 页码
+	Size    int    `json:"size" form:"size"`       // 每页大小
+	Keyword string `json:"keyword" form:"keyword"` //关键字
 }

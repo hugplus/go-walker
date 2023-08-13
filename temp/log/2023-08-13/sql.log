@@ -1,0 +1,14 @@
+2023/08/13 11:08:14 D:/works/gos/go-walker/core/db.go:73
+[error] failed to initialize database, got error Error 1049 (42000): Unknown database 'demo'
+2023/08/13 11:09:48 D:/works/gos/go-walker/modules/sys/service/sys_serv.go:28
+[9.544ms] [rows:1] INSERT INTO `sys` (`name`) VALUES ('')
+2023/08/13 11:11:19 D:/works/gos/go-walker/modules/demo/service/demo_serv.go:17 Error 1146 (42S02): Table 'demo.demo' doesn't exist
+[2.173ms] [rows:0] INSERT INTO `demo` (`name`) VALUES ('string')
+2023/08/13 11:18:36 D:/works/gos/go-walker/modules/demo/service/demo_serv.go:17 Error 1146 (42S02): Table 'demo.demo' doesn't exist
+[1.552ms] [rows:0] INSERT INTO `demo` (`name`) VALUES ('string')
+2023/08/13 11:29:54 D:/works/gos/go-walker/modules/demo/service/demo_serv.go:17 Error 1146 (42S02): Table 'demo.demo' doesn't exist
+[2.030ms] [rows:0] INSERT INTO `demo` (`name`) VALUES ('string')
+2023/08/13 11:31:16 D:/works/gos/go-walker/modules/demo/service/demo_serv.go:17 Error 1146 (42S02): Table 'demo.demo' doesn't exist
+[1.806ms] [rows:0] INSERT INTO `demo` (`name`) VALUES ('string')
+2023/08/13 11:35:53 D:/works/gos/go-walker/modules/demo/service/demo_serv.go:16 Error 1146 (42S02): Table 'demo.demo' doesn't exist
+[1.944ms] [rows:0] INSERT INTO `demo` (`name`) VALUES ('string')

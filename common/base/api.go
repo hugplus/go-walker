@@ -28,16 +28,12 @@ func (e *BaseApi) Error(c *gin.Context, err error) {
 	resp.Fail(c, codes.FAILURE, err.Error())
 }
 
-func (e *BaseApi) WithCodeError(c *gin.Context, code int, err error) {
-	resp.Fail(c, code, err.Error())
-}
-
 func (e *BaseApi) Fail(c *gin.Context, code int, msg string, data ...any) {
 	resp.Fail(c, code, msg, data)
 }
 
 func (e *BaseApi) Err(c *gin.Context, err errs.IError) {
-	resp.Err(c, err)
+	resp.Err(c, err, GetMsgByCode(c, err.Code()))
 }
 
 func (e *BaseApi) Ok(c *gin.Context, data any) {
