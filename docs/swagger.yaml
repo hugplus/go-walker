@@ -1,40 +1,63 @@
 definitions:
+  base.PageResp:
+    properties:
+      list:
+        description: 数据列表
+      page:
+        description: 当前第几页
+        type: integer
+      size:
+        description: 分页大小
+        type: integer
+      total:
+        description: 总条数
+        type: integer
+    type: object
+  base.ReqId:
+    properties:
+      id:
+        description: 主键ID
+        type: integer
+    type: object
+  base.Resp:
+    properties:
+      code:
+        description: 返回码
+        type: integer
+      data:
+        description: 数据
+      msg:
+        description: 消息
+        type: string
+      reqId:
+        description: '`json:"请求id"`'
+        type: string
+    type: object
+  dto.DemePageReq:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 每页大小
+        type: integer
+    type: object
   dto.DemoDto:
     properties:
-      age:
-        type: integer
-      email:
-        type: string
       id:
         type: integer
       name:
-        type: string
-      password:
-        minLength: 6
-        type: string
-      re_password:
+        maxLength: 64
+        minLength: 2
         type: string
     required:
-    - email
     - name
-    - password
-    - re_password
     type: object
   models.Demo:
     properties:
       id:
         type: integer
       name:
-        type: string
-    type: object
-  resp.Resp:
-    properties:
-      code:
-        type: integer
-      data: {}
-      msg:
-        type: string
-      reqId:
         type: string
     type: object
   utils.Cpu:
@@ -98,7 +121,7 @@ info:
   title: go-walker API
   version: V0.0.1
 paths:
-  /api/v1/demo/ping:
+  /api/v1/demo/create:
     post:
       consumes:
       - application/json
@@ -114,12 +137,91 @@ paths:
           description: '{"code": 200, "data": [...]}'
           schema:
             allOf:
-            - $ref: '#/definitions/resp.Resp'
+            - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
                   $ref: '#/definitions/models.Demo'
               type: object
-      summary: Ping接口
+      summary: 创建
+      tags:
+      - Demo
+  /api/v1/demo/get:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Demo'
+              type: object
+      summary: 获得
+      tags:
+      - Demo
+  /api/v1/demo/page:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.DemePageReq'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/base.PageResp'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/models.Demo'
+                        type: array
+                    type: object
+              type: object
+      summary: Page接口
+      tags:
+      - Demo
+  /api/v1/demo/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dto.DemoDto'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Demo'
+              type: object
+      summary: 更新
       tags:
       - Demo
   /api/v1/init:
@@ -130,7 +232,7 @@ paths:
           description: '{"code": 200, "data": [...]}'
           schema:
             allOf:
-            - $ref: '#/definitions/resp.Resp'
+            - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
                   type: string
@@ -146,7 +248,7 @@ paths:
           description: '{"code": 200, "data": [...]}'
           schema:
             allOf:
-            - $ref: '#/definitions/resp.Resp'
+            - $ref: '#/definitions/base.Resp'
             - properties:
                 data:
                   $ref: '#/definitions/utils.Server'

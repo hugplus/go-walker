@@ -1,4 +1,4 @@
-package resp
+package base
 
 import (
 	"net/http"
@@ -17,10 +17,10 @@ type Resp struct {
 }
 
 type PageResp struct {
-	List  []any `json:"list"`  //数据列表
-	Total int   `json:"total"` //总条数
+	List  any   `json:"list"`  //数据列表
+	Total int64 `json:"total"` //总条数
 	Size  int   `json:"size"`  //分页大小
-	Page  int   `json:"list"`  //当前第几页
+	Page  int   `json:"page"`  //当前第几页
 }
 
 //type RespFunc func()
@@ -47,10 +47,10 @@ func Fail(c *gin.Context, code int, msg string, data ...any) {
 	})
 }
 
-func Page(c *gin.Context, list []any, count int, page int, pageSize int) {
+func Page(c *gin.Context, list any, total int64, page int, pageSize int) {
 	p := PageResp{
 		Page:  page,
-		Total: count,
+		Total: total,
 		Size:  pageSize,
 		List:  list,
 	}

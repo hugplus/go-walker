@@ -3,7 +3,6 @@ package apis
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/hugplus/go-walker/common/base"
-	"github.com/hugplus/go-walker/common/base/resp"
 	"github.com/hugplus/go-walker/common/utils"
 	"github.com/hugplus/go-walker/core"
 	"github.com/hugplus/go-walker/modules/sys/models"
@@ -20,7 +19,7 @@ type SysApi struct {
 // @Summary Ping接口
 // @Description Ping接口
 // @Tags Default
-// @Success 200 {object} resp.Resp{data=utils.Server} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=utils.Server} "{"code": 200, "data": [...]}"
 // @Router /api/v1/ping [get]
 func (e *SysApi) Ping(c *gin.Context) {
 	cpu, err := utils.InitCPU()
@@ -41,39 +40,18 @@ func (e *SysApi) Ping(c *gin.Context) {
 		Ram:  ram,
 		Disk: disk,
 	}
-	resp.Ok(c, server)
+	e.Ok(c, server)
 }
 
 // init init接口
 // @Summary init接口
 // @Description init接口
 // @Tags Default
-// @Success 200 {object} resp.Resp{data=string} "{"code": 200, "data": [...]}"
+// @Success 200 {object} base.Resp{data=string} "{"code": 200, "data": [...]}"
 // @Router /api/v1/init [get]
 func (e *SysApi) Init(c *gin.Context) {
-	// core.DB().AutoMigrate(
-	// // models.CasbinRule{},
-	// // models.DictData{},
-	// // models.DictType{},
-	// // models.SysRole{},
-	// // models.SysApi{},
-	// // models.SysConfig{},
-	// // models.SysDept{},
-	// // models.SysColumns{},
-	// // models.SysJob{},
-	// // models.SysLoginLog{},
-	// // models.SysMenu{},
-	// // models.SysOperaLog{},
-	// // models.SysPost{},
-	// // models.SysRoleDept{},
-	// // models.SysTables{},
-	// // models.SysUser{},
-	// // models.SysPost{},
-	// // models.SysLoginLog{},
-	// )
 	var req dto.SysDto
 	if err := c.ShouldBind(&req); err != nil {
-		e.Error(c, err)
 		return
 	}
 	var data models.Sys
@@ -82,5 +60,5 @@ func (e *SysApi) Init(c *gin.Context) {
 		e.Err(c, err)
 		return
 	}
-	resp.Ok(c, data)
+	e.Ok(c, data)
 }
