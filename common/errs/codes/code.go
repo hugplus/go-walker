@@ -17,18 +17,12 @@ const (
 	TooManyRequests    = 10102
 )
 
-// var serverLangs = []language.Tag{
-// 	language.SimplifiedChinese, // zh-Hans fallback
-// 	language.English,           // en-US
-// 	//language.Korean,       Lang     // de
-// }
-
 func GetLangMsgByCode(acceptLanguate string, code int) string {
-	//var matcher = language.NewMatcher(serverLangs)
-	tags, _, _ := language.ParseAcceptLanguage(acceptLanguate)
-	//tag, index, confidence := matcher.Match(t...)
-	if len(tags) > 0 {
-		return GetMsg(code, tags[0].String())
+	if core.Cfg.Server.I18n {
+		tags, _, _ := language.ParseAcceptLanguage(acceptLanguate)
+		if len(tags) > 0 {
+			return GetMsg(code, tags[0].String())
+		}
 	}
 	return GetMsg(code, core.Cfg.Server.GetLang())
 }

@@ -22,6 +22,7 @@ type ServerCfg struct {
 	ReadTimeout  int    `mapstructure:"read-timeout" json:"read-timeout" yaml:"read-timeout"`
 	WriteTimeout int    `mapstructure:"write-timeout" json:"write-timeout" yaml:"write-timeout"`
 	FSType       string `mapstructure:"fs-type" json:"fs-type" yaml:"fs-type"`
+	I18n         bool   `mapstructure:"i18n" json:"i18n" yaml:"i18n"` //是否开启多语言
 	Lang         string `mapstructure:"lang" json:"lang" yaml:"lang"` //默认语言
 }
 
