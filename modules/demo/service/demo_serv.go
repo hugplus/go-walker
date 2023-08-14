@@ -1,7 +1,8 @@
 package service
 
 import (
-	"fmt"
+	"errors"
+	"strconv"
 
 	"github.com/hugplus/go-walker/common/consts"
 	"github.com/hugplus/go-walker/common/errs"
@@ -10,6 +11,7 @@ import (
 	"github.com/hugplus/go-walker/modules/demo/models"
 	"github.com/hugplus/go-walker/modules/demo/service/dto"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 type DemoService struct {
@@ -19,7 +21,6 @@ type DemoService struct {
 func (e *DemoService) Page(req dto.DemePageReq, list *[]models.Demo, total *int64, reqId string) errs.IError {
 	db := core.Db(consts.DB_DEMO)
 	//TODO WHERE
-	fmt.Printf("size:%d offset:%d", req.GetSize(), req.GetOffset())
 	if err := db.Limit(req.GetSize()).Offset(req.GetOffset()).Find(list).Count(total).Error; err != nil {
 		berr := errs.Err(codes.FAILURE, reqId, err)
 		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
@@ -46,8 +47,22 @@ func (*DemoService) Update(data *models.Demo, reqId string) errs.IError {
 	return nil
 }
 
+func (*DemoService) Del(id int, reqId string) errs.IError {
+	if err := core.Db(consts.DB_DEMO).Delete(&models.Demo{}, id).Error; err != nil {
+		berr := errs.Err(codes.FAILURE, reqId, err)
+		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
+		return berr
+	}
+	return nil
+}
+
 func (*DemoService) Get(id int, data *models.Demo, reqId string) errs.IError {
 	if err := core.Db(consts.DB_DEMO).First(data, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			berr := errs.NotFound(strconv.Itoa(id), "demo", reqId, err)
+			core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
+			return berr
+		}
 		berr := errs.Err(codes.FAILURE, reqId, err)
 		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
 		return berr

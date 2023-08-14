@@ -1,5 +1,5 @@
 package service
 
 var (
-	Demo = DemoService{}
+	DemoS = DemoService{}
 )

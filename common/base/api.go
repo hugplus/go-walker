@@ -35,7 +35,7 @@ func (e *BaseApi) Err(c *gin.Context, err errs.IError) {
 	Err(c, err, GetMsgByCode(c, err.Code()))
 }
 
-func (e *BaseApi) Ok(c *gin.Context, data any) {
+func (e *BaseApi) Ok(c *gin.Context, data ...any) {
 	Ok(c, data)
 }
 

@@ -89,7 +89,7 @@ func InvalidParameter(reqId string, cause error) IError {
 	}
 }
 
-func ResourceNotFound(id, kind, reqId string, cause error) IError {
+func NotFound(id, kind, reqId string, cause error) IError {
 	data := map[string]interface{}{"kind": kind, "id": id}
 	return &BizError{
 		reqId:  reqId,

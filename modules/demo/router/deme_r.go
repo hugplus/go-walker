@@ -18,5 +18,6 @@ func sysNoCheckRoleRouter(v1 *gin.RouterGroup) {
 		r.POST("/create", api.Create)
 		r.POST("/update", api.Update)
 		r.POST("/page", api.QueryPage)
+		r.POST("/del", api.Del)
 	}
 }

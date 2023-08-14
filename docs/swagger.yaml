@@ -145,6 +145,30 @@ paths:
       summary: 创建
       tags:
       - Demo
+  /api/v1/demo/del:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/base.ReqId'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.Resp'
+            - properties:
+                data:
+                  $ref: '#/definitions/models.Demo'
+              type: object
+      summary: 删除
+      tags:
+      - Demo
   /api/v1/demo/get:
     post:
       consumes:

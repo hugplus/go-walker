@@ -29,7 +29,7 @@ func (e *DemoApi) QueryPage(c *gin.Context) {
 	}
 	list := make([]models.Demo, 10)
 	var total int64
-	if err := service.Demo.Page(req, &list, &total, e.GetReqId(c)); err != nil {
+	if err := service.DemoS.Page(req, &list, &total, e.GetReqId(c)); err != nil {
 		e.Err(c, err)
 		return
 	}
@@ -51,7 +51,7 @@ func (e *DemoApi) Get(c *gin.Context) {
 		return
 	}
 	var data models.Demo
-	if err := service.Demo.Get(req.Id, &data, e.GetReqId(c)); err != nil {
+	if err := service.DemoS.Get(req.Id, &data, e.GetReqId(c)); err != nil {
 		e.Err(c, err)
 		return
 	}
@@ -74,7 +74,7 @@ func (e *DemoApi) Create(c *gin.Context) {
 	}
 	var data models.Demo
 	copier.Copy(&data, req)
-	if err := service.Demo.Create(&data, e.GetReqId(c)); err != nil {
+	if err := service.DemoS.Create(&data, e.GetReqId(c)); err != nil {
 		e.Err(c, err)
 		return
 	}
@@ -97,9 +97,31 @@ func (e *DemoApi) Update(c *gin.Context) {
 	}
 	var data models.Demo
 	copier.Copy(&data, req)
-	if err := service.Demo.Update(&data, e.GetReqId(c)); err != nil {
+	if err := service.DemoS.Update(&data, e.GetReqId(c)); err != nil {
 		e.Err(c, err)
 		return
 	}
 	e.Ok(c, data)
+}
+
+// Del 删除
+// @Summary 删除
+// @Tags Demo
+// @Accept application/json
+// @Product application/json
+// @Param data body base.ReqId true "body"
+// @Success 200 {object} base.Resp{data=models.Demo} "{"code": 200, "data": [...]}"
+// @Router /api/v1/demo/del [post]
+func (e *DemoApi) Del(c *gin.Context) {
+	var req base.ReqId
+	if err := c.ShouldBind(&req); err != nil {
+		e.Error(c, err)
+		return
+	}
+	//var data models.Demo
+	if err := service.DemoS.Del(req.Id, e.GetReqId(c)); err != nil {
+		e.Err(c, err)
+		return
+	}
+	e.Ok(c)
 }
