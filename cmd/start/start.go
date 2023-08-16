@@ -49,7 +49,7 @@ func run() {
 		fmt.Println(err)
 	}
 
-	fmt.Println(core.Cfg)
+	//fmt.Println(core.Cfg)
 
 	core.Init()
 	core.Run(&AppRouters)
