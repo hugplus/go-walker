@@ -1,6 +1,7 @@
 package config
 
 type CORS struct {
+	Enable    bool            `mapstructure:"enable" json:"enable" yaml:"enable"`
 	Mode      string          `mapstructure:"mode" json:"mode" yaml:"mode"`
 	Whitelist []CORSWhitelist `mapstructure:"whitelist" json:"whitelist" yaml:"whitelist"`
 }

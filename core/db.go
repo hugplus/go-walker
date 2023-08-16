@@ -69,13 +69,13 @@ func initDb(driver, dns, prefix, key string, logMode logger.LogLevel, slow, maxI
 	var db *gorm.DB
 	var err error
 	switch driver {
-	case "mysql":
+	case Mysql.String():
 		db, err = gorm.Open(mysql.Open(dns), GetGromLogCfg(logMode, prefix, slow, singular))
-	case "pgsql":
+	case Pgsql.String():
 		db, err = gorm.Open(postgres.Open(dns), GetGromLogCfg(logMode, prefix, slow, singular))
-	case "sqlite":
+	case Sqlite.String():
 		db, err = gorm.Open(sqlite.Open(dns), GetGromLogCfg(logMode, prefix, slow, singular))
-	case "mssql":
+	case Mssql.String():
 		db, err = gorm.Open(sqlserver.Open(dns), GetGromLogCfg(logMode, prefix, slow, singular))
 	// case "oracle":
 	// 	db, err = gorm.Open(oracle.Open(dbc.DSN), &gorm.Config{})

@@ -1,6 +1,6 @@
 package models
 
-import "github.com/hugplus/go-walker/common/base"
+import "github.com/hugplus/go-walker/core/base"
 
 type SysMenu struct {
 	MenuId     int      `json:"menuId" gorm:"primaryKey;autoIncrement"`

@@ -1,9 +1,6 @@
 package codes
 
-import (
-	"github.com/hugplus/go-walker/core"
-	"golang.org/x/text/language"
-)
+//"github.com/hugplus/go-walker/core"
 
 const (
 	SUCCESS            = 200
@@ -11,21 +8,12 @@ const (
 	AuthorizationError = 403
 	NotFound           = 404
 	NotLogin           = 401
+	InvalidToken       = 555
 	InvalidParameter   = 10000
 	UserDoesNotExist   = 10001
 	ServerError        = 10101
 	TooManyRequests    = 10102
 )
-
-func GetLangMsgByCode(acceptLanguate string, code int) string {
-	if core.Cfg.Server.I18n {
-		tags, _, _ := language.ParseAcceptLanguage(acceptLanguate)
-		if len(tags) > 0 {
-			return GetMsg(code, tags[0].String())
-		}
-	}
-	return GetMsg(code, core.Cfg.Server.GetLang())
-}
 
 const (
 	LANG_ZH_CN = "zh-CN"

@@ -4,10 +4,10 @@ import (
 	"errors"
 	"strconv"
 
+	"github.com/hugplus/go-walker/common/codes"
 	"github.com/hugplus/go-walker/common/consts"
-	"github.com/hugplus/go-walker/common/errs"
-	"github.com/hugplus/go-walker/common/errs/codes"
 	"github.com/hugplus/go-walker/core"
+	"github.com/hugplus/go-walker/core/errs"
 	"github.com/hugplus/go-walker/modules/demo/models"
 	"github.com/hugplus/go-walker/modules/demo/service/dto"
 	"go.uber.org/zap"
@@ -59,7 +59,7 @@ func (*DemoService) Del(id int, reqId string) errs.IError {
 func (*DemoService) Get(id int, data *models.Demo, reqId string) errs.IError {
 	if err := core.Db(consts.DB_DEMO).First(data, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			berr := errs.NotFound(strconv.Itoa(id), "demo", reqId, err)
+			berr := codes.ErrNotFound(strconv.Itoa(id), "demo", reqId, err)
 			core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
 			return berr
 		}

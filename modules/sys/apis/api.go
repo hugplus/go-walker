@@ -2,9 +2,9 @@ package apis
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/hugplus/go-walker/common/base"
 	"github.com/hugplus/go-walker/common/utils"
 	"github.com/hugplus/go-walker/core"
+	"github.com/hugplus/go-walker/core/base"
 	"github.com/hugplus/go-walker/modules/sys/models"
 	"github.com/hugplus/go-walker/modules/sys/service"
 	"github.com/hugplus/go-walker/modules/sys/service/dto"

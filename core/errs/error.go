@@ -3,8 +3,6 @@ package errs
 import (
 	"errors"
 	"fmt"
-
-	"github.com/hugplus/go-walker/common/errs/codes"
 )
 
 type ErrType string
@@ -81,21 +79,12 @@ func Err(code int, reqId string, cause error) IError {
 	}
 }
 
-func InvalidParameter(reqId string, cause error) IError {
+func ErrWithData(code int, reqId string, cause error, m map[string]any) IError {
 	return &BizError{
 		reqId:  reqId,
-		code:   codes.InvalidParameter,
+		code:   code,
 		causes: []error{cause},
-	}
-}
-
-func NotFound(id, kind, reqId string, cause error) IError {
-	data := map[string]interface{}{"kind": kind, "id": id}
-	return &BizError{
-		reqId:  reqId,
-		code:   codes.NotFound,
-		data:   data,
-		causes: []error{cause},
+		data:   m,
 	}
 }
 

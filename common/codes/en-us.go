@@ -10,4 +10,5 @@ var enUSText = map[int]string{
 	UserDoesNotExist:   "user does not exist",
 	AuthorizationError: "You have no permission",
 	NotLogin:           "Please login first",
+	InvalidToken:       "Invalid Token",
 }

@@ -1,6 +1,6 @@
 package models
 
-import "github.com/hugplus/go-walker/common/base"
+import "github.com/hugplus/go-walker/core/base"
 
 type SysJob struct {
 	JobId          int    `json:"jobId" gorm:"primaryKey;autoIncrement"` // 编码

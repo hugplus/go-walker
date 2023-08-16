@@ -12,10 +12,10 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hugplus/go-walker/common/middleware"
 	"github.com/hugplus/go-walker/common/utils"
 	"github.com/hugplus/go-walker/config"
 	"github.com/hugplus/go-walker/core/cache"
+	"github.com/hugplus/go-walker/core/inter"
 	"github.com/hugplus/go-walker/docs"
 
 	"go.uber.org/zap"
@@ -37,7 +37,6 @@ func GetEngine() http.Handler {
 }
 
 func SetEngine(aEngine http.Handler) {
-	fmt.Println("init engine")
 	engine = aEngine
 }
 
@@ -144,5 +143,5 @@ func zapInit() (logger *zap.Logger) {
 func initRouter() {
 	//初始化gin
 	r := GetGinEngine()
-	middleware.InitMiddleware(r)
+	inter.Init(r, &Cfg)
 }

@@ -8,6 +8,7 @@ require (
 	github.com/blinkbean/dingtalk v0.0.0-20210905093040-7d935c0f7e19
 	github.com/fsnotify/fsnotify v1.6.0
 	github.com/gin-gonic/gin v1.9.1
+	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/google/uuid v1.3.0
 	github.com/huaweicloud/huaweicloud-sdk-go-obs v3.23.4+incompatible
 	github.com/jinzhu/copier v0.3.5

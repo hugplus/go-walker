@@ -40,6 +40,16 @@ dbcfg: # 数据库配置
 #       max-idle-conns: 10 #最大空闲连接数 默认10
 #       max-open-conns: 30 #最大打开数
 #       max-lifetime: 60 #链接重置时间（分）
+cors:
+  enable: true
+  mode: allow-all
+  #whitelist:
+  #- allow-origin: example1.com
+  #  allow-methods: POST, GET
+  #  allow-headers: Content-Type,AccessToken,X-CSRF-Token, Authorization, Token,X-Token,X-User-Id
+  #  expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers,
+  #    Content-Type
+  #  allow-credentials: true
 extend:             # 扩展项（此处没有提供具体说明）
   authBaseUrl: http://localhost:8000
     

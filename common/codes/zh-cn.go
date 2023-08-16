@@ -10,4 +10,5 @@ var zhCNText = map[int]string{
 	UserDoesNotExist:   "用户不存在",
 	AuthorizationError: "暂无访问权限",
 	NotLogin:           "请先登录",
+	InvalidToken:       "无效的token",
 }

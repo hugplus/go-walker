@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/hugplus/go-walker/common/codes"
 	"github.com/hugplus/go-walker/common/consts"
-	"github.com/hugplus/go-walker/common/errs"
-	"github.com/hugplus/go-walker/common/errs/codes"
+	"github.com/hugplus/go-walker/core/errs"
 )
 
 type Resp struct {
