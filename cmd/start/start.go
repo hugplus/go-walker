@@ -36,7 +36,7 @@ func run() {
 	v.SetConfigType("yaml")
 	err := v.ReadInConfig()
 	if err != nil {
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+		panic(fmt.Sprintf("Fatal error config file: %v \n", err))
 	}
 	v.WatchConfig()
 	v.OnConfigChange(func(e fsnotify.Event) {
