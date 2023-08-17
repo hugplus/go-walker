@@ -13,11 +13,13 @@ definitions:
         description: 总条数
         type: integer
     type: object
-  base.ReqId:
+  base.ReqIds:
     properties:
-      id:
-        description: 主键ID
-        type: integer
+      ids:
+        description: 多id
+        items:
+          type: integer
+        type: array
     type: object
   base.Resp:
     properties:
@@ -155,7 +157,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/base.ReqId'
+          $ref: '#/definitions/base.ReqIds'
       responses:
         "200":
           description: '{"code": 200, "data": [...]}'
@@ -179,7 +181,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/base.ReqId'
+          $ref: '#/definitions/base.ReqIds'
       responses:
         "200":
           description: '{"code": 200, "data": [...]}'

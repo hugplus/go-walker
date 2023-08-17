@@ -47,8 +47,8 @@ func (*DemoService) Update(data *models.Demo, reqId string) errs.IError {
 	return nil
 }
 
-func (*DemoService) Del(id int, reqId string) errs.IError {
-	if err := core.Db(consts.DB_DEMO).Delete(&models.Demo{}, id).Error; err != nil {
+func (*DemoService) Del(ids []int, reqId string) errs.IError {
+	if err := core.Db(consts.DB_DEMO).Delete(&models.Demo{}, ids).Error; err != nil {
 		berr := errs.Err(codes.FAILURE, reqId, err)
 		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
 		return berr
@@ -66,6 +66,23 @@ func (*DemoService) Get(id int, data *models.Demo, reqId string) errs.IError {
 		berr := errs.Err(codes.FAILURE, reqId, err)
 		core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
 		return berr
+	}
+	return nil
+}
+
+func (e *DemoService) GetIds(ids []int, list *[]models.Demo, reqId string) errs.IError {
+	if len(ids) == 1 {
+		var data models.Demo
+		if err := e.Get(ids[0], &data, reqId); err != nil {
+			return err
+		}
+		*list = append(*list, data)
+	} else {
+		if err := core.Db(consts.DB_DEMO).Where("id in ?", ids).Find(list).Error; err != nil {
+			berr := errs.Err(codes.FAILURE, reqId, err)
+			core.Log.Error(errs.DB_ERR.String(), zap.Error(berr))
+			return berr
+		}
 	}
 	return nil
 }

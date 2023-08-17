@@ -56,9 +56,9 @@ func (e *SysApi) Init(c *gin.Context) {
 	}
 	var data models.Sys
 	data.Name = req.Name
-	if err := service.Sys.Ping(e.GetReqId(c), &data); err != nil {
+	if err := service.Sys.Init(); err != nil {
 		e.Err(c, err)
 		return
 	}
-	e.Ok(c, data)
+	e.Ok(c)
 }

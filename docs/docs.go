@@ -74,7 +74,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/base.ReqId"
+                            "$ref": "#/definitions/base.ReqIds"
                         }
                     }
                 ],
@@ -116,7 +116,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/base.ReqId"
+                            "$ref": "#/definitions/base.ReqIds"
                         }
                     }
                 ],
@@ -321,12 +321,15 @@ const docTemplate = `{
                 }
             }
         },
-        "base.ReqId": {
+        "base.ReqIds": {
             "type": "object",
             "properties": {
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
+                "ids": {
+                    "description": "多id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 }
             }
         },

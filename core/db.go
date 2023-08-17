@@ -28,9 +28,9 @@ func dbInit() {
 		if !dbc.Disable {
 			var logMode logger.LogLevel
 			if dbc.LogMode != "" {
-				logMode = config.GetLogMode(Cfg.DBCfg.LogMode)
-			} else {
 				logMode = config.GetLogMode(dbc.LogMode)
+			} else {
+				logMode = config.GetLogMode(Cfg.DBCfg.LogMode)
 			}
 			prefix := dbc.Prefix
 			if prefix == "" && Cfg.DBCfg.Prefix != "" {

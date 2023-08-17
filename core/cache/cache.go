@@ -39,6 +39,8 @@ func New(conf config.CacheCfg) ICache {
 			}
 			return &r
 		}
+	} else {
+		return NewMemory()
 	}
 	return nil
 }

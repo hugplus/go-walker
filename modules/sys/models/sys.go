@@ -1,10 +1,17 @@
 package models
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/hugplus/go-walker/core/base"
+)
 
 type Sys struct {
-	Id   int    `json:"id" gorm:"primaryKey;autoIncrement;comment:主键编码"`
+	base.Model
 	Name string `json:"name" gorm:"type:varchar(128);comment:名字"`
+	base.StatusModel
+	base.ControlBy
+	base.ModelIntTime
 }
 
 func (m Sys) MarshalBinary() ([]byte, error) {
