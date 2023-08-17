@@ -17,9 +17,9 @@ type SysServ struct {
 }
 
 func (s *SysServ) Init() errs.IError {
-	// core.DB().AutoMigrate(
-	// 	&models.Sys{},
-	// )
+	core.DB().AutoMigrate(
+		&models.Sys{},
+	)
 
 	cstr, err := core.Cache.Get("test")
 	fmt.Printf("Init %s ,%v \n", cstr, err)

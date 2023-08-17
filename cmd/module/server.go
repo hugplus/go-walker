@@ -1,8 +1,10 @@
 package module
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"html/template"
 
 	"github.com/hugplus/go-walker/common/utils"
 
@@ -74,27 +76,27 @@ func genFile() error {
 		return err
 	}
 
-	// t1, err := template.ParseFiles("resources/template/cmd_api.template")
-	// if err != nil {
-	// 	return err
-	// }
-	// m := map[string]string{}
-	// m["modName"] = modName
-	// var b1 bytes.Buffer
-	// err = t1.Execute(&b1, m)
-	// if err != nil {
-	// 	return err
-	// }
-	// utils.FileCreate(b1, "./cmd/api/"+modName+".go")
-	// t2, err := template.ParseFiles("resources/template/router.template")
-	// if err != nil {
-	// 	return err
-	// }
-	// var b2 bytes.Buffer
-	// err = t2.Execute(&b2, nil)
-	// if err != nil {
-	// 	return err
-	// }
-	// utils.FileCreate(b2, appPath+"/router/router.go")
+	t1, err := template.ParseFiles("resources/template/cmd_api.template")
+	if err != nil {
+		return err
+	}
+	m := map[string]string{}
+	m["modName"] = modName
+	var b1 bytes.Buffer
+	err = t1.Execute(&b1, m)
+	if err != nil {
+		return err
+	}
+	utils.FileCreate(b1, "cmd/start/"+modName+".go")
+	t2, err := template.ParseFiles("resources/template/router.template")
+	if err != nil {
+		return err
+	}
+	var b2 bytes.Buffer
+	err = t2.Execute(&b2, m)
+	if err != nil {
+		return err
+	}
+	utils.FileCreate(b2, appPath+"/router/router.go")
 	return nil
 }
