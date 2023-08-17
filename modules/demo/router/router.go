@@ -14,27 +14,8 @@ var (
 // InitRouter 路由初始化
 func InitRouter() {
 	r := core.GetGinEngine()
-
-	// the jwt middleware
-	// authMiddleware, err := common.AuthInit()
-	// if err != nil {
-	// 	log.Fatalf("JWT Init Error, %s", err.Error())
-	// }
-
-	// 注册业务路由
-	//InitBusinessRouter(r, authMiddleware)
 	noCheckRoleRouter(r)
 }
-
-// func InitBusinessRouter(r *gin.Engine, authMiddleware *jwt.GinJWTMiddleware) *gin.Engine {
-
-// 	// 无需认证的路由
-// 	noCheckRoleRouter(r)
-// 	// 需要认证的路由
-// 	checkRoleRouter(r, authMiddleware)
-
-// 	return r
-// }
 
 // noCheckRoleRouter 无需认证的路由
 func noCheckRoleRouter(r *gin.Engine) {
@@ -45,13 +26,3 @@ func noCheckRoleRouter(r *gin.Engine) {
 		f(v)
 	}
 }
-
-// // checkRoleRouter 需要认证的路由
-// func checkRoleRouter(r *gin.Engine, authMiddleware *jwtauth.GinJWTMiddleware) {
-// 	// 可根据业务需求来设置接口版本
-// 	v := r.Group("/v2/sso")
-
-// 	for _, f := range routerCheckRole {
-// 		f(v, authMiddleware)
-// 	}
-// }
